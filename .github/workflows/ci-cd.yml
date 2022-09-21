@@ -2,9 +2,9 @@ name: Continuous integration and deployment
 
 on:
   push:
-    branches: [ $default-branch, v* ]
+    branches: [ main, v* ]
   pull_request:
-    branches: [ $default-branch, v* ]
+    branches: [ main, v* ]
 
 jobs:
   build:
