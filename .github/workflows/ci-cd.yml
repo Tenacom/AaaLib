@@ -1,0 +1,24 @@
+name: Continuous integration and deployment
+
+on:
+  push:
+    branches: [ $default-branch, v* ]
+  pull_request:
+    branches: [ $default-branch, v* ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository with full history
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0 # avoid shallow clone so nbgv can do its work.
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore .NET tools
+      run: dotnet tool restore
+    - name: Run build script
+      run: dotnet cake
