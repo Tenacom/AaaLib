@@ -1,2 +1,2 @@
 # AaaLib
-Test repo for Nerdbank.GitVersioning.
+Nothing to see here. Seriously. Move on.

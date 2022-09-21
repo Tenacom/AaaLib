@@ -1,0 +1,53 @@
+<Project>
+
+  <!-- Branding, ownership, licensing, project information -->
+  <PropertyGroup>
+    <Product>AaaLib</Product>
+    <Authors>Riccardo De Agostini</Authors>
+    <Owners>Tenacom</Owners>
+    <Company>Tenacom</Company>
+    <Copyright>Copyright (C) $(Company)</Copyright>
+    <Trademark />
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://github.com/Tenacom/AaaLib</PackageProjectUrl>
+    <PackageReleaseNotes>See $(PackageProjectUrl)/blob/main/CHANGELOG.md</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/Tenacom/AaaLib.git</RepositoryUrl>
+    <IconInPackage>true</IconInPackage>
+    <ReadmeFileInPackage>true</ReadmeFileInPackage>
+    <LicenseFileInPackage>true</LicenseFileInPackage>
+    <ThirdPartyNoticeInPackage>true</ThirdPartyNoticeInPackage>
+    <UseVersionFile>false</UseVersionFile>
+  </PropertyGroup>
+
+  <!-- Common build options -->
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>false</ImplicitUsings>
+    <Deterministic>true</Deterministic>
+    <Nullable>enable</Nullable>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CodeAnalysisTreatWarningsAsErrors>false</CodeAnalysisTreatWarningsAsErrors>
+    <CLSCompliant>true</CLSCompliant>
+    <ComVisible>false</ComVisible>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <!-- SourceLink -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="all" />
+  </ItemGroup>
+  <PropertyGroup>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <!-- Automatic versioning -->
+  <ItemGroup>
+    <PackageReference Include="Nerdbank.GitVersioning" PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>

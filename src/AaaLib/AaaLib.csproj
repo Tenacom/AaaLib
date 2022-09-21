@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Nothing to see here. Seriously. Move on.</Description>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net462;net47;netcoreapp3.1;net6.0</TargetFrameworks>
+    <IsTrimmable>true</IsTrimmable>
+    <CLSCompliant>true</CLSCompliant>
+    <ComVisible>false</ComVisible>
+  </PropertyGroup>
+
+  <!--
+    NoWarn="NU5104" on a package reference lets you reference a prerelease package from a non-prerelease package.
+    Use sparingly and with uttermost caution, after having thoroughly verified the absence of a more sensible alternative.
+    https://learn.microsoft.com/en-us/nuget/reference/errors-and-warnings/nu5104
+  -->
+  <ItemGroup>
+    <PackageReference Include="Louis" NoWarn="NU5104" />
+  </ItemGroup>
+
+</Project>
