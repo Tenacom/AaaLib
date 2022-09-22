@@ -27,7 +27,7 @@ jobs:
     - name: Restore .NET tools
       run: dotnet tool restore
     - name: Set Cake verbosity to Diagnostic if debug logging is enabled
-#      if: ${{ runner.debug }}
+      if: ${{ runner.debug }}
       run: echo "CAKE_PARAMS=--verbosity=Diagnostic" >> $GITHUB_ENV
     - name: Run build script
       env:
