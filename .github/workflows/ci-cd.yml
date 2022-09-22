@@ -21,4 +21,7 @@ jobs:
     - name: Restore .NET tools
       run: dotnet tool restore
     - name: Run build script
+      env:
+        RELEASE_DEPLOYMENT_KEY: ${{ secrets.NUGET_DEPLOYMENT_KEY }}
+        PRERELEASE_DEPLOYMENT_KEY: ${{ secrets.MYGET_DEPLOYMENT_KEY }}
       run: dotnet cake

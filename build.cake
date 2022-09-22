@@ -19,6 +19,13 @@ using SysPath = System.IO.Path;
 var target = Argument("target", "Default");
 
 //==============================================================================================
+// CONSTANTS
+//==============================================================================================
+
+const string NuGetReleaseSource = "https://api.nuget.org/v3/index.json";
+const string NuGetPrereleaseSource = "https://www.myget.org/F/tenacom-preview/api/v2/package";
+
+//==============================================================================================
 // SETUP / TEARDOWN
 //==============================================================================================
 
@@ -31,7 +38,8 @@ public record BuildData(
     bool IsPrerelease,
     bool IsGitHubAction,
     bool IsCI,
-    DotNetMSBuildSettings MSBuildSettings
+    DotNetMSBuildSettings MSBuildSettings,
+    DotNetPushSettings PushSettings
 );
 
 Setup<BuildData>(context =>
@@ -61,6 +69,11 @@ Setup<BuildData>(context =>
         NoLogo = true,
     };
 
+    var pushSettings = new DotNetPushSettings {
+        Source = isPrerelease ? NuGetPrereleaseSource : NuGetReleaseSource,
+        ApiKey = EnvironmentVariable<string>(isPrerelease ? "RELEASE_DEPLOYMENT_KEY" : "PRERELEASE_DEPLOYMENT_KEY",
+    };
+
     Information($"{(isCI ? "CI" : "Local")} build of {solutionPath.GetFilenameWithoutExtension()} v{version} ({(isPublicRelease ? "public" : "private")} {(isPrerelease ? "pre" : null)}release from {@ref})");
     return new(
         SolutionPath: solutionPath,
@@ -71,7 +84,8 @@ Setup<BuildData>(context =>
         IsPrerelease: isPrerelease,
         IsGitHubAction: isGitHubAction,
         IsCI: isCI,
-        MSBuildSettings: msbuildSettings
+        MSBuildSettings: msbuildSettings,
+        PushSettings: pushSettings
     );
 });
 
@@ -181,24 +195,25 @@ Task("DeployNuGet")
     {
         foreach (var package in GetFiles(SysPath.Combine("artifacts", data.Configuration, "*.nupkg")))
         {
-            DotNetNuGetPush(package, new DotNetNuGetPushSettings
-            {
-
-            });
+            DotNetNuGetPush(package, data.PushSettings);
+            var symbolPackage = package.ChangeExtension(".snupkg");
+            if (FileExists(symbolPackage)) {
+                DotNetNuGetPush(symbolPackage, data.PushSettings);
+            }
         }
     });
 
 Task("Deploy")
     .Description("Deploy artifacts - Only runs on CI builds")
-    .WithCriteria<BuildData>((_, data) => data.IsCI)
+    .WithCriteria<BuildData>((_, data) => data.IsCI && data.isPublicRelease)
     .IsDependentOn("DeployNuGet");
 
 Task("Default")
     .Description("Default task - Equivalent to Init + Test + Pack")
     .IsDependentOn("Init")
     .IsDependentOn("Test")
-    .IsDependentOn("Pack")/*
-    .IsDependentOn("Deploy")*/;
+    .IsDependentOn("Pack")
+    .IsDependentOn("Deploy");
 
 //==============================================================================================
 // EXECUTION
