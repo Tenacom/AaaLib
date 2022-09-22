@@ -54,14 +54,14 @@ Setup<BuildData>(context =>
             || HasEnvironmentVariable("TEAMCITY_VERSION")
             || HasEnvironmentVariable("JENKINS_URL");
 
-    var (version, isPublicRelease, isPrerelease) = GetVersionInformation(context);
+    var (version, @ref, isPublicRelease, isPrerelease) = GetVersionInformation(context);
     var msbuildSettings = new DotNetMSBuildSettings {
         MaxCpuCount = 1,
         ContinuousIntegrationBuild = isCI,
         NoLogo = true,
     };
 
-    Information($"{(isCI ? "CI" : "Local")} build of {solutionPath.GetFilenameWithoutExtension()} v{version} ({(isPublicRelease ? "public" : "private")} {(isPrerelease ? "pre" : null)}release)");
+    Information($"{(isCI ? "CI" : "Local")} build of {solutionPath.GetFilenameWithoutExtension()} v{version} ({(isPublicRelease ? "public" : "private")} {(isPrerelease ? "pre" : null)}release from {@ref})");
     return new(
         SolutionPath: solutionPath,
         Solution: solution,
@@ -210,7 +210,7 @@ RunTarget(target);
 // UTILITY METHODS
 //==============================================================================================
 
-static (string Version, bool IsPublicRelease, bool IsPrerelease) GetVersionInformation(ICakeContext context)
+static (string Version, string Ref, bool IsPublicRelease, bool IsPrerelease) GetVersionInformation(ICakeContext context)
 {
     // Use nbgv to get version information.
     var nbgv = context.Tools.Resolve("nbgv.dll");
@@ -230,6 +230,7 @@ static (string Version, bool IsPublicRelease, bool IsPrerelease) GetVersionInfor
     var json = ParseJsonObject(nbgvOutput.ToString(), "The output of nbgv");
     return (
         Version: GetJsonPropertyValue<string>(json, "NuGetPackageVersion", "the output of nbgv"),
+        Ref: GetJsonPropertyValue<string>(json, "BuildingRef", "the output of nbgv"),
         IsPublicRelease: GetJsonPropertyValue<bool>(json, "PublicRelease", "the output of nbgv"),
         IsPrerelease: !string.IsNullOrEmpty(GetJsonPropertyValue<string>(json, "PrereleaseVersion", "the output of nbgv")));
 }
