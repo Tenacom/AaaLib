@@ -186,7 +186,7 @@ Task("DeployNuGet")
     .IsDependentOn("Pack")
     .Does<BuildData>(data =>
     {
-        var nuGetApiKeyVariable = data.IsPrerelease ? "RELEASE_DEPLOYMENT_KEY" : "PRERELEASE_DEPLOYMENT_KEY";
+        var nuGetApiKeyVariable = data.IsPrerelease ? "PRERELEASE_DEPLOYMENT_KEY" : "RELEASE_DEPLOYMENT_KEY";
         var nuGetApiKey = EnvironmentVariable<string>(nuGetApiKeyVariable, string.Empty);
         if (string.IsNullOrEmpty(nuGetApiKey))
         {
