@@ -7,6 +7,10 @@
   "nugetPackageVersion": {
     "semVer": 2
   },
+  "publicReleaseRefSpec": [
+    "^refs/heads/main$", // Main releases ship from main
+    "^refs/heads/v\\d+\\.\\d+$" // Servicing releases ship from vX.Y branches
+  ],
   "release": {
     "branchName": "v{version}",
     "versionIncrement": "minor",
