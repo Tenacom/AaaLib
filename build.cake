@@ -38,8 +38,7 @@ public record BuildData(
     bool IsPrerelease,
     bool IsGitHubAction,
     bool IsCI,
-    DotNetMSBuildSettings MSBuildSettings,
-    DotNetPushSettings PushSettings
+    DotNetMSBuildSettings MSBuildSettings
 );
 
 Setup<BuildData>(context =>
@@ -69,11 +68,6 @@ Setup<BuildData>(context =>
         NoLogo = true,
     };
 
-    var pushSettings = new DotNetPushSettings {
-        Source = isPrerelease ? NuGetPrereleaseSource : NuGetReleaseSource,
-        ApiKey = EnvironmentVariable<string>(isPrerelease ? "RELEASE_DEPLOYMENT_KEY" : "PRERELEASE_DEPLOYMENT_KEY",
-    };
-
     Information($"{(isCI ? "CI" : "Local")} build of {solutionPath.GetFilenameWithoutExtension()} v{version} ({(isPublicRelease ? "public" : "private")} {(isPrerelease ? "pre" : null)}release from {@ref})");
     return new(
         SolutionPath: solutionPath,
@@ -84,8 +78,7 @@ Setup<BuildData>(context =>
         IsPrerelease: isPrerelease,
         IsGitHubAction: isGitHubAction,
         IsCI: isCI,
-        MSBuildSettings: msbuildSettings,
-        PushSettings: pushSettings
+        MSBuildSettings: msbuildSettings
     );
 });
 
@@ -189,23 +182,35 @@ Task("Pack")
 
 Task("DeployNuGet")
     .Description("Push NuGet packages")
-    .WithCriteria<BuildData>((_, data) => data.IsCI)
+    .WithCriteria<BuildData>((_, data) => data.IsCI && data.IsPublicRelease)
     .IsDependentOn("Pack")
     .Does<BuildData>(data =>
     {
+        var nuGetApiKeyVariable = data.IsPrerelease ? "RELEASE_DEPLOYMENT_KEY" : "PRERELEASE_DEPLOYMENT_KEY";
+        var nuGetApiKey = EnvironmentVariable<string>(nuGetApiKeyVariable, string.Empty);
+        if (string.IsNullOrEmpty(nuGetApiKey))
+        {
+            throw new CakeException(255, $"Missing environment variable {nuGetApiKeyVariable}.");
+        }
+
+        var nuGetPushSettings = new DotNetNuGetPushSettings {
+            Source = data.IsPrerelease ? NuGetPrereleaseSource : NuGetReleaseSource,
+            ApiKey = nuGetApiKey,
+        };
+
         foreach (var package in GetFiles(SysPath.Combine("artifacts", data.Configuration, "*.nupkg")))
         {
-            DotNetNuGetPush(package, data.PushSettings);
+            DotNetNuGetPush(package, nuGetPushSettings);
             var symbolPackage = package.ChangeExtension(".snupkg");
             if (FileExists(symbolPackage)) {
-                DotNetNuGetPush(symbolPackage, data.PushSettings);
+                DotNetNuGetPush(symbolPackage, nuGetPushSettings);
             }
         }
     });
 
 Task("Deploy")
     .Description("Deploy artifacts - Only runs on CI builds")
-    .WithCriteria<BuildData>((_, data) => data.IsCI && data.isPublicRelease)
+    .WithCriteria<BuildData>((_, data) => data.IsCI && data.IsPublicRelease)
     .IsDependentOn("DeployNuGet");
 
 Task("Default")
