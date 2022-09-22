@@ -26,8 +26,11 @@ jobs:
         dotnet-version: 6.0.x
     - name: Restore .NET tools
       run: dotnet tool restore
+    - name: Set Cake verbosity to Diagnostic if debug logging is enabled
+      if: ${{ runner.debug }}
+      run: echo "CAKE_PARAMS='--verbosity Diagnostic'" >> $GITHUB_ENV
     - name: Run build script
       env:
         RELEASE_DEPLOYMENT_KEY: ${{ secrets.NUGET_DEPLOYMENT_KEY }}
         PRERELEASE_DEPLOYMENT_KEY: ${{ secrets.MYGET_DEPLOYMENT_KEY }}
-      run: dotnet cake
+      run: dotnet cake $CAKE_PARAMS
