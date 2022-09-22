@@ -190,16 +190,42 @@ Task("DeployNuGet")
         var nuGetApiKey = EnvironmentVariable<string>(nuGetApiKeyVariable, string.Empty);
         if (string.IsNullOrEmpty(nuGetApiKey))
         {
-            throw new CakeException(255, $"Missing environment variable {nuGetApiKeyVariable}.");
+            throw new CakeException(255, $"Environment variable {nuGetApiKeyVariable} is missing or has an empty value.");
         }
 
         var nuGetPushSettings = new DotNetNuGetPushSettings {
             Source = data.IsPrerelease ? NuGetPrereleaseSource : NuGetReleaseSource,
             ApiKey = nuGetApiKey,
-            SkipDuplicate = true
+            SkipDuplicate = true,
         };
 
-        DotNetNuGetPush(SysPath.Combine("artifacts", data.Configuration, "*.nupkg"), nuGetPushSettings);
+        var packages = SysPath.Combine("artifacts", data.Configuration, "*.nupkg");
+
+        // DotNetNuGetPush(packages, nuGetPushSettings);
+
+        using (var process = StartAndReturnProcess("dotnet", new ProcessSettings {
+            Arguments = new ProcessArgumentBuilder()
+                .Append("nuget")
+                .Append("push")
+                .AppendQuoted(packages)
+                .Append("--source")
+                .AppendQuoted(nuGetPushSettings.Source)
+                .Append("--api-key")
+                .AppendQuotedSecret(nuGetPushSettings.ApiKey)
+                .Append("--skip-duplicate"),
+            RedirectStandardOutput = true,
+            RedirectedStandardOutputHandler = s => { Information(s); return s; },
+            RedirectStandardError = true,
+            RedirectedStandardErrorHandler = s => { Warning(s); return s; },
+        }))
+        {
+            process.WaitForExit();
+            var exitCode = process.GetExitCode();
+            if (exitCode != 0)
+            {
+                throw new CakeException(1, $"NuGet package deployment failed with exit code {exitCode}.");
+            }
+        }
     });
 
 Task("Deploy")
