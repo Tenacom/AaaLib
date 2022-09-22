@@ -196,16 +196,10 @@ Task("DeployNuGet")
         var nuGetPushSettings = new DotNetNuGetPushSettings {
             Source = data.IsPrerelease ? NuGetPrereleaseSource : NuGetReleaseSource,
             ApiKey = nuGetApiKey,
+            SkipDuplicate = true
         };
 
-        foreach (var package in GetFiles(SysPath.Combine("artifacts", data.Configuration, "*.nupkg")))
-        {
-            DotNetNuGetPush(package, nuGetPushSettings);
-            var symbolPackage = package.ChangeExtension(".snupkg");
-            if (FileExists(symbolPackage)) {
-                DotNetNuGetPush(symbolPackage, nuGetPushSettings);
-            }
-        }
+        DotNetNuGetPush(SysPath.Combine("artifacts", data.Configuration, "*.nupkg"), nuGetPushSettings);
     });
 
 Task("Deploy")
