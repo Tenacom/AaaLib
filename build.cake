@@ -23,7 +23,7 @@ var target = Argument("target", "Default");
 //==============================================================================================
 
 const string NuGetReleaseSource = "https://api.nuget.org/v3/index.json";
-const string NuGetPrereleaseSource = "https://www.myget.org/F/tenacom-preview/api/v2/package";
+const string NuGetPrereleaseSource = "https://www.myget.org/F/tenacom-preview/api/v3/index.json";
 
 //==============================================================================================
 // SETUP / TEARDOWN
