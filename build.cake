@@ -197,8 +197,8 @@ Task("Default")
     .Description("Default task - Equivalent to Init + Test + Pack")
     .IsDependentOn("Init")
     .IsDependentOn("Test")
-    .IsDependentOn("Pack")
-    .IsDependentOn("Deploy");
+    .IsDependentOn("Pack")/*
+    .IsDependentOn("Deploy")*/;
 
 //==============================================================================================
 // EXECUTION
