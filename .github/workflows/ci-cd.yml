@@ -19,7 +19,7 @@ jobs:
     - name: Checkout repository with full history
       uses: actions/checkout@v3
       with:
-        fetch-depth: 0 # avoid shallow clone so nbgv can do its work.
+        fetch-depth: 0 # Checkout with full history so nbgv can compute Git height correctly.
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v2
       with:
