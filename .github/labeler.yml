@@ -1,0 +1,31 @@
+area-aaalib:
+  - "src/AaaLib/**/*.cs"
+
+area-build:
+  - "**/*.sln"
+  - "**/*.csproj"
+  - "**/*.props"
+  - "**/*.targets"
+  - "**/*.cake"
+
+area-repo:
+  - ".github/*.yml"
+  - ".github/**/*.md"
+
+area-ci:
+  - ".github/workflows/**/*"
+  - "lgtm.yml"
+
+area-deps:
+  - "**/Directory.Packages.props"
+  - Directory.Build.props
+  - Directory.Build.targets
+  - "src/Buildvana.Sdk/Sdk/PackageVersions.props"
+
+area-docs:
+  - "docs/**/*"
+  - "**/CHANGELOG.md"
+  - "**/LICENSE"
+  - "**/NuGet-README.md"
+  - "**/README.md"
+  - "**/THIRD-PARTY-NOTICES"
