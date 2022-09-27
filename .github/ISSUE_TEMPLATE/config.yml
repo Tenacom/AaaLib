@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/Tenacom/AaaLib/blob/main/SECURITY.md
+    about: Please report security vulnerabilities here.
+  - name: Ask or answer a question
+    url: https://github.com/Tenacom/AaaLib/discussions/categories/q-a
+    about: Please ask and answer questions in our dedicated Q&A area.

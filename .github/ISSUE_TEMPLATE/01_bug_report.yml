@@ -1,0 +1,86 @@
+name: Bug report
+description: Report a Create a report to help us improve
+labels: [ 'bug' ]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to submit this bug report!
+  - type: input
+    attributes:
+      label: Affected version(s)
+      description: On which version of the project does the lamented behavior occur?
+      placeholder: n.n.n
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: Regression?
+      multiple: false
+      options:
+        - NO - This is a new bug
+        - YES - A previous version was not affected
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Context
+      description: If this is a regression, please also specify a version that you know is not affected by this bug.
+      placeholder: When I call `FancyGizmo.DoStuff()`, I get an exception.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Expected behavior
+      placeholder: The fancy gizmo should do stuff.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Actual behavior
+      placeholder: An `InvalidOperationException` is thrown (stack trace follows).
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: How to reproduce
+      description: If at all possible, provide the link to a minimal repro project, or a source snippet that demonstrates the bug.
+      placeholder: |
+        ```C#
+            using Gizmos;
+
+            class Program
+            {
+                public void Main()
+                {
+                    var gizmo = new FancyGizmo();
+
+                    // This will throw InvalidOperationException
+                    gizmo.DoStuff();
+                }
+            }
+        ```
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Configuration
+      description: |
+        * In which kind of project(s) are you experiencing the lamented behavior?
+        * To your knowledge, which operating system / CPU architecture are affected?
+        * Do you know whether the problem may be specific to your configuration?
+      placeholder: |
+        .NET SDK 6.0.401
+        Visual Studio 2022 v15.3.1
+        Target frameworks: netstandard2.0, net6.0
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Other information
+      description: |
+        * Please include any relevant information you have. Please prefer pasted text over images (so it shows up in searches).
+        * If you have an idea where the problem might lie, let us know that here. Please include any pointers to code, relevant changes, or related issues you know of.
+        * Do you know of any workarounds?
+    validations:
+      required: false
