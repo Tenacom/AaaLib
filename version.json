@@ -4,17 +4,17 @@
   "assemblyVersion": {
     "precision": "major"
   },
-  "nugetPackageVersion": {
-    "semVer": 2
+  "nuGetPackageVersion": {
+    "semVer": 2.0
   },
   "publicReleaseRefSpec": [
-    "^refs/heads/main$", // Main releases ship from main
-    "^refs/heads/v\\d+\\.\\d+$" // Servicing releases ship from vX.Y branches
+    "^refs/heads/main$",
+    "^refs/heads/v\\d+\\.\\d+$"
   ],
   "release": {
-    "branchName": "v{version}",
-    "versionIncrement": "minor",
     "firstUnstableTag": "preview"
   },
-  "pathFilters": [ "/src" ]
+  "pathFilters": [
+    "/src"
+  ]
 }
