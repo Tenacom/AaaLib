@@ -29,4 +29,4 @@ jobs:
       if: ${{ runner.debug }}
       run: echo "CAKE_PARAMS=--verbosity=Diagnostic" >> $GITHUB_ENV
     - name: Run build script
-      run: dotnet cake $CAKE_PARAMS
+      run: dotnet cake --target Verify $CAKE_PARAMS
