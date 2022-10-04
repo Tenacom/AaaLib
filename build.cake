@@ -71,6 +71,18 @@ Task("CleanAll")
     .Description("Delete all output directories, VS data, R# caches")
     .Does<BuildData>(CleanAll);
 
+Task("Build")
+    .Description("Build all projects")
+    .Does<BuildData>(data => {
+        if (!data.IsCI)
+        {
+            CleanAll(data);
+        }
+
+        RestoreSolution(data);
+        BuildSolution(data, false);
+    });
+
 Task("Verify")
     .Description("Build all projects, run tests, and build artifacts")
     .Does<BuildData>(data => {
