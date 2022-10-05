@@ -91,6 +91,9 @@ labels:
     - name: breaking
       color: ffcc00
       description: "[issue/PR] requires / contains breaking changes."
+    - name: ignore-for-release
+      color: cccccc
+      description: "[PR] will not appear in the release changelog."
     - name: help-wanted
       color: cc3366
       description: "[issue/PR] needs help to solve / finalize."

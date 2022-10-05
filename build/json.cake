@@ -7,8 +7,11 @@
 // JSON helpers
 // ---------------------------------------------------------------------------------------------
 
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+
+using SysFile = System.IO.File;
 
 /*
  * Summary : Parses a JSON object from a string. Fails the build if not successful.
@@ -41,6 +44,73 @@ static JsonObject ParseJsonObject(string str, string description = "The provided
         JsonObject obj => obj,
         object other => Fail<JsonObject>($"{description} was parsed as a {other.GetType().Name}, not a {nameof(JsonObject)}."),
     };
+}
+
+/*
+ * Summary : Loads a JSON object from a file. Fails the build if not successful.
+ * Params  : path - The path of the file to parse.
+ * Returns : The parsed object.
+ */
+static JsonObject LoadJsonObject(FilePath path)
+{
+    var fullPath = path.FullPath;
+    JsonNode? node;
+    try
+    {
+        using var stream = SysFile.OpenRead(fullPath);
+        node = JsonNode.Parse(
+            stream,
+            new JsonNodeOptions { PropertyNameCaseInsensitive = false },
+            new JsonDocumentOptions
+            {
+                AllowTrailingCommas = true,
+                CommentHandling = JsonCommentHandling.Skip,
+            });
+    }
+    catch (IOException e)
+    {
+        Fail($"Could not read from {fullPath}: {e.Message}");
+        throw null;
+    }
+    catch (JsonException)
+    {
+        Fail($"{fullPath} does not contain valid JSON.");
+        throw null;
+    }
+
+    return node switch {
+        null => Fail<JsonObject>($"{fullPath} was parsed as JSON null."),
+        JsonObject obj => obj,
+        object other => Fail<JsonObject>($"{fullPath} was parsed as a {other.GetType().Name}, not a {nameof(JsonObject)}."),
+    };
+}
+
+/*
+ * Summary : Saves a JSON object to a file. Fails the build if not successful.
+ * Params  : path - The path of the file to parse.
+ * Returns : The parsed object.
+ */
+static void SaveJson(JsonNode json, FilePath path)
+{
+    var fullPath = path.FullPath;
+    try
+    {
+        using var stream = SysFile.OpenWrite(fullPath);
+        var writerOptions = new JsonWriterOptions
+        {
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            Indented = true,
+        };
+
+        using var writer = new Utf8JsonWriter(stream, writerOptions);
+        json.WriteTo(writer);
+        stream.SetLength(stream.Position);
+    }
+    catch (IOException e)
+    {
+        Fail($"Could not write to {fullPath}: {e.Message}");
+        throw null;
+    }
 }
 
 /*

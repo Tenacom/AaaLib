@@ -13,6 +13,7 @@
 #load "./build/nbgv.cake"
 #load "./build/options.cake"
 #load "./build/process.cake"
+#load "./build/version.cake"
 #load "./build/workspace.cake"
 
 #nullable enable
@@ -24,7 +25,7 @@
 Setup<BuildData>(context =>
 {
     var data = CreateBuildData();
-    Information($"Repository        : {data.RepositoryOwner}/{data.RepositoryName}");
+    Information($"Repository        : {data.RepositoryHostUrl}/{data.RepositoryOwner}/{data.RepositoryName}");
     Information($"Git remote name   : {data.Remote}");
     Information($"Git reference     : {data.Ref}");
     Information($"Branch            : {data.Branch}");
@@ -71,34 +72,33 @@ Task("CleanAll")
     .Description("Delete all output directories, VS data, R# caches")
     .Does<BuildData>(CleanAll);
 
+Task("LocalCleanAll")
+    .Description("Like CleanAll, but only runs on a local machine")
+    .WithCriteria<BuildData>(data => !data.IsCI)
+    .Does<BuildData>(CleanAll);
+
+Task("Restore")
+    .Description("Restores dependencies")
+    .IsDependentOn("LocalCleanAll")
+    .Does<BuildData>(data => RestoreSolution(data));
+
 Task("Build")
     .Description("Build all projects")
-    .Does<BuildData>(data => {
-        if (!data.IsCI)
-        {
-            CleanAll(data);
-        }
+    .IsDependentOn("Restore")
+    .Does<BuildData>(data => BuildSolution(data, false));
 
-        RestoreSolution(data);
-        BuildSolution(data, false);
-    });
+Task("Test")
+    .Description("Build all projects and run tests")
+    .IsDependentOn("Build")
+    .Does<BuildData>(data => TestSolution(data, false, false));
 
-Task("Verify")
-    .Description("Build all projects, run tests, and build artifacts")
-    .Does<BuildData>(data => {
-        if (!data.IsCI)
-        {
-            CleanAll(data);
-        }
-
-        RestoreSolution(data);
-        BuildSolution(data, false);
-        TestSolution(data, false, false);
-        PackSolution(data, false, false);
-    });
+Task("Pack")
+    .Description("Build all projects, run tests, and prepare build artifacts")
+    .IsDependentOn("Test")
+    .Does<BuildData>(data => PackSolution(data, false, false));
 
 Task("Release")
-    .Description("Publish a new public release")
+    .Description("Publish a new public release (CI only)")
     .Does<BuildData>(async data => {
 
         // Preliminary checks
@@ -109,11 +109,37 @@ Task("Release")
         var releaseId = await CreateDraftReleaseAsync(data);
         try
         {
-            // Update changelog only on non-prerelease
             var committed = false;
+
+            // Advance version if requested.
+            var versionAdvance = GetOption<VersionAdvance>("versionAdvance", VersionAdvance.None);
+            if (versionAdvance != VersionAdvance.None)
+            {
+                Information($"Version advance requested: {versionAdvance}.");
+                var versionFile = VersionFile.Load();
+                var previousVersionSpec = versionFile.VersionSpec;
+                if (versionFile.AdvanceVersion(versionAdvance))
+                {
+                    Information($"Version advanced from {previousVersionSpec} to {versionFile.VersionSpec}.");
+                    versionFile.Save();
+                    _ = Exec("git", $"add \"{versionFile.Path.FullPath}\"");
+                    _ = Exec("git", $"commit -m \"Change version from {previousVersionSpec} to {versionFile.VersionSpec}\"");
+                    committed = true;
+                }
+                else
+                {
+                    Information("Version not changed.");
+                }
+            }
+            else
+            {
+                Information("No version advance requested.");
+            }
+
+            // Update changelog only on non-prerelease
             if (!data.IsPrerelease)
             {
-                if (!GetOption<bool>("skipChangelogCheck", false))
+                if (!GetOption<bool>("checkChangelog", true))
                 {
                     Ensure(
                         ChangelogHasUnreleasedChanges(data.ChangelogPath),
@@ -121,7 +147,7 @@ Task("Release")
                 }
 
                 // Update the changelog and commit the change before building.
-                // This ensures that the Git height is up to date in the built artifacts' version.
+                // This ensures that the Git height is up to date when computing a version for the build artifacts.
                 PrepareChangelogForRelease(data);
 
                 Information("Committing updated changelog...");
@@ -148,6 +174,17 @@ Task("Release")
             TestSolution(data, false, false);
             PackSolution(data, false, false);
 
+            if (!data.IsPrerelease)
+            {
+                // Change the new section's title in the changelog to reflect the actual version.
+                UpdateChangelogNewSectionTitle(data);
+
+                // Amend previous commit so Git height doesn't change.
+                Information("Amending changelog update commit...");
+                _ = Exec("git", $"add \"{data.ChangelogPath.FullPath}\"");
+                _ = Exec("git", $"commit --amend -m \"Update changelog\"");
+            }
+
             // Wrap things up: push the commit and deploy artifacts.
             if (committed)
             {
@@ -159,7 +196,7 @@ Task("Release")
         }
         catch (Exception e)
         {
-            Error($"{e.GetType().Name}: {e.Message}");
+            Error(e is CakeException ? e.Message : $"{e.GetType().Name}: {e.Message}");
             await DeleteReleaseAsync(data, releaseId);
             throw;
         }

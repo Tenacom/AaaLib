@@ -9,6 +9,7 @@
 // GitHub API helpers
 // ---------------------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
 using Octokit;
 
 /*
@@ -20,16 +21,24 @@ async Task<int> CreateDraftReleaseAsync(BuildData data)
 {
     var tag = data.Version;
     Information("Creating a draft release for {tag}...");
+    var client = CreateGitHubClient();
+    var releaseNotesRequest = new GenerateReleaseNotesRequest(tag)
+    {
+        TargetCommitish = data.Branch,
+    };
+
+    var body = "We also have a [human-curated changelog]({data.RepositoryHostUrl}/{data.RepositoryOwner}/{data.RepositoryName}/blob/{tag}/CHANGELOG.md).\n\n---\n\n"
+        + (await client.Repository.Release.GenerateReleaseNotes(data.RepositoryOwner, data.RepositoryName, releaseNotesRequest)).Body;
+
     var newRelease = new NewRelease(tag)
     {
         Name = tag,
-        Body = $"See the [changelog](https://github.com/{data.RepositoryOwner}/{data.RepositoryName}/blob/main/CHANGELOG.md) for more information.",
+        Body = body,
         TargetCommitish = data.Branch,
         Prerelease = data.IsPrerelease,
         Draft = true,
     };
 
-    var client = CreateGitHubClient();
     return (await client.Repository.Release.Create(data.RepositoryOwner, data.RepositoryName, newRelease)).Id;
 }
 

@@ -111,7 +111,6 @@ T GetOptionOrFail<T>(string name, string? environmentPrefix)
  * Params  : prefix - An optional prefix for the environment variable name;
  *                    for example, camelCasedOption (prefix = "MYAPP_") -> MYAPP_CAMEL_CASED_OPTION
  */
-// Copyright (c) 2013 Scott Kirkland - MIT License - https://github.com/srkirkland/Inflector
 // Copyright (c) .NET Foundation and Contributors - MIT License - https://github.com/Humanizr/Humanizer
 static string OptionNameToEnvironmentVariableName(string name, string? prefix = null)
     => (prefix ?? string.Empty) + Regex.Replace(

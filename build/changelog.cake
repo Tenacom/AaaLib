@@ -14,6 +14,12 @@ using System.Text.RegularExpressions;
 
 using SysFile = System.IO.File;
 
+/*
+ * Summary : Checks the changelog for contents in the "Unreleased changes" section.
+ * Params  : changelogPath - The FilePath of the changelog.
+ * Returns : If there are any contents (excluding blank lines and sub-section headings)
+ *           in the "Unreleased changes" section, true; otherwise, false.
+ */
 bool ChangelogHasUnreleasedChanges(FilePath changelogPath)
 {
     using (var reader = new StreamReader(changelogPath.FullPath, Encoding.UTF8))
@@ -45,6 +51,11 @@ bool ChangelogHasUnreleasedChanges(FilePath changelogPath)
     return false;
 }
 
+/*
+ * Summary : Prepares the changelog for a release by moving the contents of the "Unreleased changes" section
+ *           to a new section.
+ * Params  : data - Build configuratiohn data.
+ */
 void PrepareChangelogForRelease(BuildData data)
 {
     Information("Updating changelog...");
@@ -137,7 +148,7 @@ void PrepareChangelogForRelease(BuildData data)
 
             // Write header of new release section
             writer.WriteLine(string.Empty);
-            writer.WriteLine($"## (TODO) New release");
+            writer.WriteLine("## " + MakeChangelogSectionTitle(data));
 
             var newSectionLines = CollectNewSectionLines();
             var newSectionCount = newSectionLines.Count;
@@ -176,4 +187,77 @@ void PrepareChangelogForRelease(BuildData data)
     }
 
     SysFile.WriteAllText(data.ChangelogPath.FullPath, sb.ToString(), encoding);
+}
+
+/*
+ * Summary : Updates the heading of the first section of the changelog after the "Unreleased changes" section
+ *           to reflect a change in the released version.
+ * Params  : data - Build configuratiohn data.
+ */
+void UpdateChangelogNewSectionTitle(BuildData data)
+{
+    Information("Updating changelog's new release section title...");
+    var encoding = new UTF8Encoding(false, true);
+    var sb = new StringBuilder();
+    using (var reader = new StreamReader(data.ChangelogPath.FullPath, encoding))
+    using (var writer = new StringWriter(sb, CultureInfo.InvariantCulture))
+    {
+        // Using a StringWriter instead of a StringBuilder allows for a custom line separator
+        // Under Windows, a StringBuilder would only use "\r\n" as a line separator, which would be wrong in this case
+        writer.NewLine = "\n";
+        var sectionHeadingRegex = new Regex(@"^ {0,3}##($|[^#])", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+
+        const int ReadingFileHeader = 0;
+        const int ReadingUnreleasedChangesSection = 1;
+        const int ReadingRemainderOfFile = 2;
+        const int ReadingDone = 3;
+        var state = ReadingFileHeader;
+        while (state != ReadingDone)
+        {
+            var line = reader.ReadLine();
+            switch (state)
+            {
+                case ReadingFileHeader:
+                    Ensure(line != null, $"{data.ChangelogPath.GetFilename()} contains no sections.");
+                    writer.WriteLine(line);
+                    if (sectionHeadingRegex.IsMatch(line))
+                    {
+                        state = ReadingUnreleasedChangesSection;
+                    }
+
+                    break;
+                case ReadingUnreleasedChangesSection:
+                    Ensure(line != null, $"{data.ChangelogPath.GetFilename()} contains only one section.");
+                    if (sectionHeadingRegex.IsMatch(line))
+                    {
+                        // Replace header of second section
+                        writer.WriteLine("## " + MakeChangelogSectionTitle(data));
+                        state = ReadingRemainderOfFile;
+                        break;
+                    }
+
+                    writer.WriteLine(line);
+                    break;
+                case ReadingRemainderOfFile:
+                    if (line == null)
+                    {
+                        state = ReadingDone;
+                        break;
+                    }
+
+                    writer.WriteLine(line);
+                    break;
+                default:
+                    Fail($"Internal error: reading state corrupted ({state}).");
+                    throw null;
+            }
+        }
+    }
+
+    SysFile.WriteAllText(data.ChangelogPath.FullPath, sb.ToString(), encoding);
+}
+
+string MakeChangelogSectionTitle(BuildData data)
+{
+    return $"[{data.Version}](https://github.com/{data.RepositoryOwner}/{data.RepositoryName}/releases/tag/{data.Version}) ({DateTime.Now:yyyy-MM-dd})";
 }

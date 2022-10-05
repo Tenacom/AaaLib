@@ -13,6 +13,11 @@
 sealed record BuildData(
 
     /*
+     * Summary : Gets the repository host URL (e.g. "https://github.com" for a repository hosted on GitHub.)
+     */
+    string RepositoryHostUrl,
+
+    /*
      * Summary : Gets the repository owner (e.g. "Tenacom" for repository Tenacom/SomeLibrary.)
      */
     string RepositoryOwner,
@@ -128,6 +133,7 @@ BuildData CreateBuildData()
     };
 
     return new(
+        RepositoryHostUrl: repository.HostUrl,
         RepositoryOwner: repository.Owner,
         RepositoryName: repository.Name,
         Remote: repository.Remote,

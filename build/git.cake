@@ -18,34 +18,37 @@ string GetCurrentGitBranch() => Exec("git", "branch --show-current").FirstOrDefa
 
 /*
  * Summary : Attempts to get information about the remote repository.
- * Returns : Remote - The Git remote name.
- *           Owner  - The repository owner.
- *           Name   - The repository name.
+ * Returns : Remote  - The Git remote name.
+ *           HostUrl - The base URL of the Git repository host.
+ *           Owner   - The repository owner.
+ *           Name    - The repository name.
  * Remarks : - If the githubRepository argument is given, or the GITHUB_REPOSITORY environment variable is set
  *             (as it happens in GitHub Actions,) Owner and Name are taken from there, while Remote is set
  *             to the first Git remote found whose fetch URL matches them.
  *           - If GITHUB_REPOSITORY is not available, Git remote fetch URLs are parsed for Owner and Name;
  *             remotes "upstream" and "origin" are tested, in that order, in case "origin" is a fork.
  */
-bool TryGetRepositoryInfo(out (string Remote, string Owner, string Name) result)
+bool TryGetRepositoryInfo(out (string Remote, string HostUrl, string Owner, string Name) result)
 {
     return TryGetRepositoryInfoFromGitHubActions(out result)
         || TryGetRepositoryInfoFromGitRemote("upstream", out result)
         || TryGetRepositoryInfoFromGitRemote("origin", out result);
 
-    bool TryGetRepositoryInfoFromGitHubActions(out (string Remote, string Owner, string Name) result)
+    bool TryGetRepositoryInfoFromGitHubActions(out (string Remote, string HostUrl, string Owner, string Name) result)
     {
-        var repository = GetOption<string>("GITHUB_REPOSITORY", string.Empty);
+        var repository = GetOption<string>("githubRepository", string.Empty);
         if (string.IsNullOrEmpty(repository))
         {
             result = default;
             return false;
         }
 
+        var hostUrl = GetOptionOrFail<string>("githubServerUrl");
         var segments = repository.Split('/');
         foreach (var remote in Exec("git", "remote"))
         {
             if (TryGetRepositoryInfoFromGitRemote(remote, out result)
+                && string.Equals(result.HostUrl, hostUrl, StringComparison.Ordinal)
                 && string.Equals(result.Owner, segments[0], StringComparison.Ordinal)
                 && string.Equals(result.Name, segments[1], StringComparison.Ordinal))
             {
@@ -57,7 +60,7 @@ bool TryGetRepositoryInfo(out (string Remote, string Owner, string Name) result)
         return false;
     }
 
-    bool TryGetRepositoryInfoFromGitRemote(string remote, out (string Remote, string Owner, string Name) result)
+    bool TryGetRepositoryInfoFromGitRemote(string remote, out (string Remote, string HostUrl, string Owner, string Name) result)
     {
         if (Exec("git", "remote get-url " + remote, out var output) != 0)
         {
@@ -95,7 +98,7 @@ bool TryGetRepositoryInfo(out (string Remote, string Owner, string Name) result)
             return false;
         }
 
-        result = (remote, segments[0], segments[1]);
+        result = (remote, $"{uri.Scheme}://{uri.Host}{(uri.IsDefaultPort ? null : ":" + uri.Port.ToString())}", segments[0], segments[1]);
         return true;
     }
 }
