@@ -20,14 +20,14 @@ using Octokit;
 async Task<int> CreateDraftReleaseAsync(BuildData data)
 {
     var tag = data.Version;
-    Information("Creating a draft release for {tag}...");
+    Information($"Creating a draft release for {tag}...");
     var client = CreateGitHubClient();
     var releaseNotesRequest = new GenerateReleaseNotesRequest(tag)
     {
         TargetCommitish = data.Branch,
     };
 
-    var body = "We also have a [human-curated changelog]({data.RepositoryHostUrl}/{data.RepositoryOwner}/{data.RepositoryName}/blob/{tag}/CHANGELOG.md).\n\n---\n\n"
+    var body = $"We also have a [human-curated changelog]({data.RepositoryHostUrl}/{data.RepositoryOwner}/{data.RepositoryName}/blob/{tag}/CHANGELOG.md).\n\n---\n\n"
         + (await client.Repository.Release.GenerateReleaseNotes(data.RepositoryOwner, data.RepositoryName, releaseNotesRequest)).Body;
 
     var newRelease = new NewRelease(tag)
@@ -52,7 +52,7 @@ Task PublishReleaseAsync(BuildData data, int id)
 {
     // The version could have changed, for example if we updated the changelog, thus altering the Git height.
     var tag = data.Version;
-    Information("Publishing the previously created release as {tag}...");
+    Information($"Publishing the previously created release as {tag}...");
     var update = new ReleaseUpdate
     {
         TagName = tag,
