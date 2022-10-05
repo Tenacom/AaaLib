@@ -2,8 +2,9 @@
 # For more ionformation see:
 # https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 
-# GitHub configuration files
+# GitHub and apps configuration files
 /.github/ @rdeago
+/.all-contributorsrc @rdeago
 
 # Git configuration files
 /.git* @rdeago
