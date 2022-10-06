@@ -161,14 +161,14 @@ Task("Release")
             {
                 // The commit changed the Git height: update build configuration data to reflect the change.
                 (var version, _, _, _) = GetVersionInformation();
-                Information("New version after commit is {version}");
+                Information($"New version after commit is {version}");
                 data = data with { Version = version };
             }
 
             // Ensure that the release tag doesn't already exist.
             // This assumes that full repo history has been checked out;
             // however, that is already a prerequisite for using Nerdbank.GitVersioning.
-            Ensure(!GitTagExists(data.Version), "Tag {data.Version} already exists in repository.");
+            Ensure(!GitTagExists(data.Version), $"Tag {data.Version} already exists in repository.");
             dupeTagChecked = true;
 
             RestoreSolution(data);
@@ -190,7 +190,7 @@ Task("Release")
             // Wrap things up: push the commit and deploy artifacts.
             if (committed)
             {
-                Information("Pushing changes to {data.Remote}...");
+                Information($"Pushing changes to {data.Remote}...");
                 _ = Exec("git", $"push {data.Remote} {data.Ref}:{data.Ref}");
             }
 
