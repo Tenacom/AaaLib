@@ -65,16 +65,23 @@ Task PublishReleaseAsync(BuildData data, int id)
 }
 
 /*
- * Summary : Asynchronously deletes a release on the GitHub repository.
- * Params  : data - Build configuration data.
- *           id   - The ID of the release.
+ * Summary : Asynchronously deletes a release and, optionally, the corresponding tag on the GitHub repository.
+ * Params  : data    - Build configuration data.
+ *           id      - The ID of the release.
+ *           tagName - The tag name, or null to not delete a tag.
  * Returns : A Task that represents the ongoing operation.
  */
-Task DeleteReleaseAsync(BuildData data, int id)
+async Task DeleteReleaseAsync(BuildData data, int id, string? tagName)
 {
     Information("Deleting the previously created release...");
     var client = CreateGitHubClient();
-    return client.Repository.Release.Delete(data.RepositoryOwner, data.RepositoryName, id);
+    await client.Repository.Release.Delete(data.RepositoryOwner, data.RepositoryName, id).ConfigureAwait(false);
+    if (tagName != null)
+    {
+        var reference = "refs/tags/" + tagName;
+        Information($"Deleting {reference} in GitHub repository...");
+        await client.Git.Reference.Delete(data.RepositoryOwner, data.RepositoryName, reference).ConfigureAwait(false);
+    }
 }
 
 GitHubClient CreateGitHubClient()

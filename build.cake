@@ -107,6 +107,7 @@ Task("Release")
 
         // Create the release as a draft first, so if the token has no permissions we can bail out early
         var releaseId = await CreateDraftReleaseAsync(data);
+        var dupeTagChecked = false;
         try
         {
             var committed = false;
@@ -168,6 +169,7 @@ Task("Release")
             // This assumes that full repo history has been checked out;
             // however, that is already a prerequisite for using Nerdbank.GitVersioning.
             Ensure(!GitTagExists(data.Version), "Tag {data.Version} already exists in repository.");
+            dupeTagChecked = true;
 
             RestoreSolution(data);
             BuildSolution(data, false);
@@ -197,7 +199,7 @@ Task("Release")
         catch (Exception e)
         {
             Error(e is CakeException ? e.Message : $"{e.GetType().Name}: {e.Message}");
-            await DeleteReleaseAsync(data, releaseId);
+            await DeleteReleaseAsync(data, releaseId, dupeTagChecked ? data.Version : null);
             throw;
         }
 
