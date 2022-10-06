@@ -108,6 +108,9 @@ void NuGetPushAll(BuildData data)
     };
 
     var packages = SysPath.Combine(data.ArtifactsPath.FullPath, nupkgMask);
-    Information($"Pushing NuGet packages to {nugetSource}...");
-    DotNetNuGetPush(packages, nugetPushSettings);
+    foreach (var path in GetFiles(packages))
+    {
+        Information($"Pushing {path} to {nugetSource}...");
+        DotNetNuGetPush(path, nugetPushSettings);
+    }
 }
