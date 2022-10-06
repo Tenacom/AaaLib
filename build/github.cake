@@ -2,6 +2,7 @@
 // See LICENSE file in the project root for full license information.
 
 #addin nuget:?package=Octokit&version=3.0.0
+#addin nuget:?package=Cake.Http&version=2.0.0
 
 #nullable enable
 
@@ -20,16 +21,41 @@ using Octokit;
 async Task<int> CreateDraftReleaseAsync(BuildData data)
 {
     var tag = data.Version;
-    Information($"Creating a draft release for {tag}...");
+    Information($"Generating release notes for {tag}...");
     var client = CreateGitHubClient();
+
+/* https://github.com/octokit/octokit.net/issues/2589 - GenerateReleaseNotes calls the wrong URL
     var releaseNotesRequest = new GenerateReleaseNotesRequest(tag)
     {
         TargetCommitish = data.Branch,
     };
 
-    var body = $"We also have a [human-curated changelog]({data.RepositoryHostUrl}/{data.RepositoryOwner}/{data.RepositoryName}/blob/{tag}/CHANGELOG.md).\n\n---\n\n"
-        + (await client.Repository.Release.GenerateReleaseNotes(data.RepositoryOwner, data.RepositoryName, releaseNotesRequest)).Body;
+    var generateNotesResponse = await client.Repository.Release.GenerateReleaseNotes(data.RepositoryOwner, data.RepositoryName, releaseNotesRequest).ConfigureAwait(false);
+    var body = generateNotesResponse.Body;
+*/
 
+    // --- BEGIN workaround
+    var httpSettings = new HttpSettings()
+        .SetAccept("application/vnd.github.v3")
+        .AppendHeader("Authorization", "Token " + GetOptionOrFail<string>("githubToken"))
+        .SetJsonRequestBody(new
+        {
+            tag_name = tag,
+            request_commitish = data.Branch,
+        })
+        .AppendHeader("User-Agent", "buildvana (Win32NT 10.0.19044; amd64; en-US; Octokit.net 3.0.0+063e85e4db5ad54ba4b121fb63ee86502247afee)")
+        .EnsureSuccessStatusCode(true);
+
+    var response = await HttpPostAsync($"https://api.github.com/repos/{data.RepositoryOwner}/{data.RepositoryName}/releases/generate-notes", httpSettings);
+    var json = ParseJsonObject(response, "The generate-notes HTTP response ");
+    var body = GetJsonPropertyValue<string>(json, "body", "generate-notes HTTP response");
+
+    // --- END workaround
+
+    body = $"We also have a [human-curated changelog]({data.RepositoryHostUrl}/{data.RepositoryOwner}/{data.RepositoryName}/blob/{tag}/CHANGELOG.md).\n\n---\n\n"
+         + body;
+
+    Information($"Creating a draft release for {tag}...");
     var newRelease = new NewRelease(tag)
     {
         Name = tag,
@@ -39,7 +65,8 @@ async Task<int> CreateDraftReleaseAsync(BuildData data)
         Draft = true,
     };
 
-    return (await client.Repository.Release.Create(data.RepositoryOwner, data.RepositoryName, newRelease)).Id;
+    var createReleaseResponse = await client.Repository.Release.Create(data.RepositoryOwner, data.RepositoryName, newRelease).ConfigureAwait(false);
+    return createReleaseResponse.Id;
 }
 
 /*
