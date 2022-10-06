@@ -79,7 +79,7 @@ Task DeleteReleaseAsync(BuildData data, int id)
 
 GitHubClient CreateGitHubClient()
 {
-    var client = new GitHubClient(new ProductHeaderValue("buildvana"));
+    var client = new GitHubClient(new ProductHeaderValue("Buildvana"));
     client.Credentials = new Credentials(GetOptionOrFail<string>("githubToken"));
     return client;
 }
