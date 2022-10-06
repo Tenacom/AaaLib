@@ -195,6 +195,7 @@ Task("Release")
             }
 
             NuGetPushAll(data);
+            await PublishReleaseAsync(data, releaseId);
         }
         catch (Exception e)
         {
@@ -202,8 +203,6 @@ Task("Release")
             await DeleteReleaseAsync(data, releaseId, dupeTagChecked ? data.Version : null);
             throw;
         }
-
-        await PublishReleaseAsync(data, releaseId);
     });
 
 // =============================================================================================
