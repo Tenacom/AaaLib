@@ -101,6 +101,7 @@ void NuGetPushAll(BuildData data)
     var nugetSource = GetOptionOrFail<string>(data.IsPrerelease ? "prereleaseNugetSource" : "releaseNugetSource");
     var nugetApiKey = GetOptionOrFail<string>(data.IsPrerelease ? "prereleaseNugetKey" : "releaseNugetKey");
     var nugetPushSettings = new DotNetNuGetPushSettings {
+        ForceEnglishOutput = true,
         Source = nugetSource,
         ApiKey = nugetApiKey,
         SkipDuplicate = true,
