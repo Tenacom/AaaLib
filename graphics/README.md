@@ -5,7 +5,7 @@ All the graphic elements listed below, except where otherwise specified, are sub
   > Copyright (C) Tenacom and Contributors. All rights reserved.
   > Licensed under the MIT license. See the LICENSE file in the project root for full license information.
 
-## `Logo`
+## `SquareLogo`
 
 Reference logo, basic square logo. Also used as NuGet package icon.
 
