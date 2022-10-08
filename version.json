@@ -14,7 +14,5 @@
   "release": {
     "firstUnstableTag": "preview"
   },
-  "pathFilters": [
-    "/src"
-  ]
+  "pathFilters": []
 }
