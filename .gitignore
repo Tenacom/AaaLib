@@ -23,3 +23,7 @@ _ReSharper.*/
 
 # Windows thumbnails
 Thumbs.db
+
+# DocFx
+docs/api/
+docs/_site/
