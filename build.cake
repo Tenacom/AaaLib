@@ -13,49 +13,11 @@
 #load "./build/nbgv.cake"
 #load "./build/options.cake"
 #load "./build/process.cake"
+#load "./build/setup-teardown.cake"
 #load "./build/version.cake"
 #load "./build/workspace.cake"
 
 #nullable enable
-
-// =============================================================================================
-// SETUP / TEARDOWN
-// =============================================================================================
-
-Setup<BuildData>(context =>
-{
-    var data = CreateBuildData();
-    Information($"Repository        : {data.RepositoryHostUrl}/{data.RepositoryOwner}/{data.RepositoryName}");
-    Information($"Git remote name   : {data.Remote}");
-    Information($"Git reference     : {data.Ref}");
-    Information($"Branch            : {data.Branch}");
-    Information($"Build environment : {(data.IsCI ? "cloud" : "local")}");
-    Information($"Solution          : {data.SolutionPath.GetFilename()}");
-    Information($"Version           : {data.Version}");
-    Information($"Public release    : {(data.IsPublicRelease ? "yes" : "no")}");
-    Information($"Prerelease        : {(data.IsPrerelease ? "yes" : "no")}");
-
-    if (data.IsCI && !data.IsGitHubAction)
-    {
-        throw new CakeException(255, "This script can only run locally or in a GitHub Actions workflow.");
-    }
-
-    return data;
-});
-
-Teardown<BuildData>((context, data) => {
-
-    // For some reason, DotNetBuildServerShutdown hangs in a GitHub Actions runner;
-    // it is still useful on a local machine though
-    if (!data.IsCI)
-    {
-        context.DotNetBuildServerShutdown(new DotNetBuildServerShutdownSettings
-        {
-            Razor = true,
-            VBCSCompiler = true,
-        });
-    }
-});
 
 // =============================================================================================
 // TASKS
