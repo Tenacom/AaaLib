@@ -44,9 +44,9 @@
      inkscape:window-maximized="1"
      inkscape:window-y="-8"
      inkscape:window-x="-8"
-     inkscape:cy="237.82226"
-     inkscape:cx="809.96775"
-     inkscape:zoom="1.0932534"
+     inkscape:cy="319.68222"
+     inkscape:cx="573.26713"
+     inkscape:zoom="1.5734375"
      inkscape:snap-page="true"
      inkscape:bbox-nodes="true"
      inkscape:snap-bbox="true"
@@ -104,7 +104,7 @@
      height="640"
      width="1280"
      id="rect855"
-     style="fill:#fffff0;fill-opacity:1;stroke:none;stroke-width:0;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none" />
+     style="fill:#ffffee;fill-opacity:1;stroke:none" />
   <text
      id="text839"
      y="452.99521"
@@ -139,18 +139,19 @@
        x="252.09483"
        y="551.9494">https://github.com/Tenacom/AaaLib</tspan></text>
   <g
-     id="g4537"
-     transform="matrix(0.82546818,0,0,0.82546818,-65.300836,-26.10251)">
+     id="g2595"
+     transform="matrix(0.79545454,0,0,0.79545454,-301.81818,264.54545)">
     <path
-       id="path4150-3-5-3"
-       transform="matrix(0.93749998,0,0,0.93749998,176.64825,59.114143)"
-       d="M 512,136.42578 C 256.82439,179.42482 54.404467,272.55743 3.5429688,433.73828 H 276.67188 C 307.31244,336.63786 392.95775,264.2342 512,212.60547 Z"
-       style="fill:#dc0000;fill-opacity:1;fill-rule:evenodd;stroke:#dc0000;stroke-width:8.42153;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       inkscape:connector-curvature="0" />
+       id="path4150-3-5-3-0"
+       d="M 960,-152 C 720,-104 544,-56 480,120 H 720 C 752,24 848,-24 960,-72 Z"
+       style="fill:#dd0000;fill-opacity:1;stroke:none"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc" />
     <path
-       d="M 347.29721,465.74475 V 195.74851 H 180.08026 v -63.63409 h 476.56802 v 63.63409 H 489.43155 v 269.99624 z"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:42.9981px;line-height:125%;font-family:Tahoma;-inkscape-font-specification:'Tahoma, Bold';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:7.15652;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="path4259"
-       inkscape:connector-curvature="0" />
+       d="M 640,120 V -136 H 480 v -96 h 480 v 96 H 800 v 256 z"
+       style="fill:#000000;fill-opacity:1;stroke:none"
+       id="path4259-9"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccccccc" />
   </g>
 </svg>

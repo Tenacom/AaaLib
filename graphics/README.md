@@ -1,13 +1,12 @@
 # Graphics
 
-All the graphic elements listed below, except where otherwise specified, are subject to the following copyright notice:
-
-  > Copyright (C) Tenacom and Contributors. All rights reserved.
-  > Licensed under the MIT license. See the LICENSE file in the project root for full license information.
+All the graphic elements listed below, except where otherwise specified, are Copyright (C) Tenacom and Contributors and are licensed under the MIT license. See the LICENSE file in the project root for full license information.
 
 ## `SquareLogo`
 
 Reference logo, basic square logo. Also used as NuGet package icon.
+
+**This logo is a trademark of Tenacom and is Copyright (C) Riccardo De Agostini. It is licensed for exclusive use by Tenacom.**
 
 Related files:
 
