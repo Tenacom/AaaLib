@@ -156,7 +156,17 @@ Task("Release")
                 _ = Exec("git", $"push {data.Remote} {data.Ref}:{data.Ref}");
             }
 
+            // Publish NuGet packages
             NuGetPushAll(data);
+
+            // If this is not a prerelease and we are releasing from the main branch,
+            // dispatch a separate workflow to publish documentation.
+            if (!data.IsPrerelease && data.Ref == "main")
+            {
+                await DispatchWorkflow(data, "deploy-pages.yml", "main");
+            }
+
+            // Last but not least, publish the release.
             await PublishReleaseAsync(data, releaseId);
         }
         catch (Exception e)
