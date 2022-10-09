@@ -1,6 +1,7 @@
 // Copyright (C) Tenacom and contributors. Licensed under the MIT license.
 // See LICENSE file in the project root for full license information.
 
+#addin nuget:?package=Cake.Http&version=2.0.0
 #addin nuget:?package=Octokit&version=3.0.1
 
 #nullable enable
@@ -85,6 +86,30 @@ async Task DeleteReleaseAsync(BuildData data, int id, string? tagName)
         Information($"Deleting {reference} in GitHub repository...");
         await client.Git.Reference.Delete(data.RepositoryOwner, data.RepositoryName, reference).ConfigureAwait(false);
     }
+}
+
+/*
+ * Summary : Asynchronously creates a workflow dispatch event on the GitHub repository.
+ * Params  : data     - Build configuration data.
+ *           filename - The name of the workflow file to run, including extension.
+ *           ref      - The branch or tag on which to dispatch the workflow run.
+ *           inputs   - An optional anonymous object containing the inputs for the workflow.
+ * Returns : A Task that represents the ongoing operation.
+ */
+async Task DispatchWorkflow(BuildData data, string filename, string @ref, object? inputs = null)
+{
+    object requestBody = inputs == null
+        ? new { @ref = @ref }
+        : new { @ref = @ref, inputs = inputs };
+
+    var httpSettings = new HttpSettings()
+        .SetAccept("application/vnd.github.v3")
+        .AppendHeader("Authorization", "Token " + GetOptionOrFail<string>("githubToken"))
+        .AppendHeader("User-Agent", "Buildvana (Win32NT 10.0.19044; amd64; en-US)")
+        .SetJsonRequestBody(requestBody)
+        .EnsureSuccessStatusCode(true);
+
+    _ = await HttpPostAsync($"https://api.github.com/repos/{data.RepositoryOwner}/{data.RepositoryName}/actions/workflows/{filename}/dispatches", httpSettings);
 }
 
 GitHubClient CreateGitHubClient()
