@@ -44,9 +44,9 @@
      inkscape:window-maximized="1"
      inkscape:window-y="-8"
      inkscape:window-x="-8"
-     inkscape:cy="319.68222"
-     inkscape:cx="573.26713"
-     inkscape:zoom="1.5734375"
+     inkscape:cy="297.43793"
+     inkscape:cx="423.91261"
+     inkscape:zoom="0.78671875"
      inkscape:snap-page="true"
      inkscape:bbox-nodes="true"
      inkscape:snap-bbox="true"
@@ -118,16 +118,16 @@
        style="stroke-width:2.74184">Nothing to see here. Seriously. Move on.</tspan></text>
   <text
      id="text839-5"
-     y="351.58414"
-     x="410.08029"
-     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:212.579px;line-height:1.05;font-family:'Pragati Narrow';-inkscape-font-specification:'Pragati Narrow, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#660000;fill-opacity:1;stroke:#ff9999;stroke-width:7.5081;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.501961;paint-order:normal"
+     y="334.68845"
+     x="367.66071"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:218.588px;line-height:1.05;font-family:'Pragati Narrow';-inkscape-font-specification:'Pragati Narrow, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:0px;word-spacing:0px;fill:#660000;fill-opacity:1;stroke:#ff9999;stroke-width:7.72033;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.501961;paint-order:normal"
      xml:space="preserve"
-     transform="scale(1.2774577,0.78280479)"><tspan
+     transform="scale(1.3160508,0.75984909)"><tspan
        sodipodi:role="line"
        id="tspan1727"
-       x="410.08029"
-       y="351.58414"
-       style="stroke-width:7.5081">AaaLib</tspan></text>
+       x="367.66071"
+       y="334.68845"
+       style="stroke-width:7.72033">AaaLib</tspan></text>
   <text
      id="text835-8-9"
      y="551.9494"
@@ -139,19 +139,22 @@
        x="252.09483"
        y="551.9494">https://github.com/Tenacom/AaaLib</tspan></text>
   <g
-     id="g2595"
-     transform="matrix(0.79545454,0,0,0.79545454,-301.81818,264.54545)">
+     id="g4284"
+     transform="matrix(0.83333333,0,0,0.83333333,66.666667,-13.333333)">
     <path
-       id="path4150-3-5-3-0"
-       d="M 960,-152 C 720,-104 544,-56 480,120 H 720 C 752,24 848,-24 960,-72 Z"
-       style="fill:#dd0000;fill-opacity:1;stroke:none"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccc" />
+       d="M 64,224 224,64 h 64 L 448,224 H 384 L 336,176 H 176 l -48,48 z m 144,-80 h 96 L 256,96 Z"
+       id="path347"
+       style="fill:#dddddd;fill-opacity:1;stroke:none"
+       sodipodi:nodetypes="ccccccccccccc" />
     <path
-       d="M 640,120 V -136 H 480 v -96 h 480 v 96 H 800 v 256 z"
-       style="fill:#000000;fill-opacity:1;stroke:none"
-       id="path4259-9"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccccccc" />
+       d="M 64,336 224,176 h 64 L 448,336 H 384 L 336,288 H 176 l -48,48 z m 144,-80 h 96 l -48,-48 z"
+       id="path2549"
+       style="fill:#cccccc;stroke:none"
+       sodipodi:nodetypes="ccccccccccccc" />
+    <path
+       d="M 64,448 224,288 h 64 L 448,448 H 384 L 336,400 H 176 l -48,48 z m 144,-80 h 96 l -48,-48 z"
+       id="path2547"
+       style="fill:#bbbbbb;fill-opacity:1;stroke:none"
+       sodipodi:nodetypes="ccccccccccccc" />
   </g>
 </svg>

@@ -37,8 +37,8 @@
      inkscape:window-maximized="1"
      inkscape:window-y="-8"
      inkscape:window-x="-8"
-     inkscape:cy="256.44063"
-     inkscape:cx="209.29432"
+     inkscape:cy="256"
+     inkscape:cx="256"
      inkscape:zoom="2.2695312"
      inkscape:snap-page="false"
      inkscape:bbox-nodes="true"
@@ -69,7 +69,8 @@
      inkscape:snap-grids="true"
      inkscape:snap-to-guides="false"
      inkscape:showpageshadow="2"
-     inkscape:deskcolor="#d1d1d1">
+     inkscape:deskcolor="#d1d1d1"
+     showguides="true">
     <inkscape:grid
        originy="0"
        originx="0"
@@ -78,26 +79,53 @@
        spacingx="4"
        spacingy="4"
        empspacing="4" />
+    <sodipodi:guide
+       position="-16,448"
+       orientation="0,512"
+       id="guide1727"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="448,-32"
+       orientation="512,0"
+       id="guide1729"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="528,64"
+       orientation="0,-512"
+       id="guide1731"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="64,528"
+       orientation="-512,0"
+       id="guide1733"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="256,536"
+       orientation="1,0"
+       id="guide1743"
+       inkscape:locked="false" />
   </sodipodi:namedview>
   <rect
-     style="fill:#ffffee;fill-opacity:1;stroke:none"
-     id="rect1089"
+     style="fill:#ffffee;stroke:none"
+     id="rect2603"
      width="512"
      height="512"
      x="0"
      y="0"
-     ry="96"
-     rx="96" />
+     ry="128" />
   <path
-     id="path4150-3-5-3"
-     d="M 496,160 C 256,208 80,256 16,432 H 256 C 288,336 384,288 496,240 Z"
-     style="fill:#dd0000;fill-opacity:1;stroke:none"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="ccccc" />
+     d="M 64,224 224,64 h 64 L 448,224 H 384 L 336,176 H 176 l -48,48 z m 144,-80 h 96 L 256,96 Z"
+     id="path347"
+     style="fill:#dddddd;stroke:none;fill-opacity:1"
+     sodipodi:nodetypes="ccccccccccccc" />
   <path
-     d="M 176,432 V 176 H 16 V 80 H 496 V 176 H 336 v 256 z"
-     style="fill:#000000;fill-opacity:1;stroke:none"
-     id="path4259"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="ccccccccc" />
+     d="M 64,336 224,176 h 64 L 448,336 H 384 L 336,288 H 176 l -48,48 z m 144,-80 h 96 l -48,-48 z"
+     id="path2549"
+     style="fill:#cccccc;stroke:none"
+     sodipodi:nodetypes="ccccccccccccc" />
+  <path
+     d="M 64,448 224,288 h 64 L 448,448 H 384 L 336,400 H 176 l -48,48 z m 144,-80 h 96 l -48,-48 z"
+     id="path2547"
+     style="fill:#bbbbbb;stroke:none;fill-opacity:1"
+     sodipodi:nodetypes="ccccccccccccc" />
 </svg>

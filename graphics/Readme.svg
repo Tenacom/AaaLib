@@ -37,9 +37,9 @@
      inkscape:window-maximized="1"
      inkscape:window-y="-8"
      inkscape:window-x="-8"
-     inkscape:cy="10.804906"
-     inkscape:cx="231.53371"
-     inkscape:zoom="1.9435615"
+     inkscape:cy="80.121951"
+     inkscape:cx="360"
+     inkscape:zoom="2.7333333"
      inkscape:snap-page="true"
      inkscape:bbox-nodes="true"
      inkscape:snap-bbox="true"
@@ -97,28 +97,30 @@
        y="138.1579"
        style="stroke-width:2.93504">Nothing to see here. Seriously. Move on.</tspan></text>
   <g
-     id="g2415"
+     id="g4089"
      transform="scale(0.3125)">
     <rect
-       style="fill:#ffffee;fill-opacity:1;stroke:none"
-       id="rect1089"
+       style="fill:#ffffee;stroke:none"
+       id="rect2603"
        width="512"
        height="512"
        x="0"
        y="0"
-       ry="96"
-       rx="96" />
+       ry="128" />
     <path
-       id="path4150-3-5-3"
-       d="M 496,160 C 256,208 80,256 16,432 H 256 C 288,336 384,288 496,240 Z"
-       style="fill:#dd0000;fill-opacity:1;stroke:none"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccc" />
+       d="M 64,224 224,64 h 64 L 448,224 H 384 L 336,176 H 176 l -48,48 z m 144,-80 h 96 L 256,96 Z"
+       id="path347"
+       style="fill:#dddddd;fill-opacity:1;stroke:none"
+       sodipodi:nodetypes="ccccccccccccc" />
     <path
-       d="M 176,432 V 176 H 16 V 80 h 480 v 96 H 336 v 256 z"
-       style="fill:#000000;fill-opacity:1;stroke:none"
-       id="path4259"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccccccc" />
+       d="M 64,336 224,176 h 64 L 448,336 H 384 L 336,288 H 176 l -48,48 z m 144,-80 h 96 l -48,-48 z"
+       id="path2549"
+       style="fill:#cccccc;stroke:none"
+       sodipodi:nodetypes="ccccccccccccc" />
+    <path
+       d="M 64,448 224,288 h 64 L 448,448 H 384 L 336,400 H 176 l -48,48 z m 144,-80 h 96 l -48,-48 z"
+       id="path2547"
+       style="fill:#bbbbbb;fill-opacity:1;stroke:none"
+       sodipodi:nodetypes="ccccccccccccc" />
   </g>
 </svg>
