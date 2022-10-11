@@ -13,6 +13,7 @@
 #load "./build/nbgv.cake"
 #load "./build/options.cake"
 #load "./build/process.cake"
+#load "./build/public-api.cake"
 #load "./build/setup-teardown.cake"
 #load "./build/version.cake"
 #load "./build/workspace.cake"
@@ -76,6 +77,12 @@ Task("Release")
 
             // Advance version if requested.
             var versionAdvance = context.GetOption<VersionAdvance>("versionAdvance", VersionAdvance.None);
+            if (context.GetOption<bool>("checkPublicApi", true))
+            {
+                var requiredVersionAdvance = context.GetMaxPublicApiRequiredVersionAdvance();
+                Ensure(versionAdvance >= requiredVersionAdvance, $"Changes to public API require a minimum version advance of {requiredVersionAdvance}.");
+            }
+
             if (versionAdvance != VersionAdvance.None)
             {
                 context.Information($"Version advance requested: {versionAdvance}.");
@@ -96,6 +103,26 @@ Task("Release")
             else
             {
                 context.Information("No version advance requested.");
+            }
+
+            // Update public API files only on non-prerelease
+            if (!data.IsPrerelease)
+            {
+                var modified = context.TransferAllPublicApiToShipped().ToArray();
+                if (modified.Length > 0)
+                {
+                    context.Information($"{modified.Length} public API files were modified.");
+                    foreach (var path in modified)
+                    {
+                        _ = context.Exec("git", $"add \"{path.FullPath}\"");
+                    }
+
+                    commit = true;
+                }
+                else
+                {
+                    context.Information("No public API files were updated.");
+                }
             }
 
             // Update changelog only on non-prerelease

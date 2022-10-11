@@ -17,6 +17,8 @@ using System.Text.RegularExpressions;
 
 /*
  * Summary : Specifies how to advance the project version before publishing a release.
+ * Remarks : The values of this enum are sorted in ascending order of importance,
+ *           so that they may be compared. For example, Major > Minor.
  */
 enum VersionAdvance
 {

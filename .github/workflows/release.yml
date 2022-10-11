@@ -18,6 +18,11 @@ on:
         - Stable
         - Minor
         - Major
+      checkPublicApi:
+        description: 'Check public API'
+        required: false
+        default: true
+        type: boolean
       checkChangelog:
         description: 'Check changelog'
         required: false
@@ -37,12 +42,14 @@ jobs:
       RELEASE_NUGET_SOURCE: 'https://api.nuget.org/v3/index.json'
       RELEASE_NUGET_KEY: ${{ secrets.NUGET_DEPLOYMENT_KEY }}
       VERSION_ADVANCE: ${{ inputs.versionAdvance }}
+      CHECK_PUBLIC_API: ${{ inputs.checkPublicApi }}
       CHECK_CHANGELOG: ${{ inputs.checkChangelog }}
     steps:
     - name: Log workflow inputs
       run: |
-        echo "Version advance : $VERSION_ADVANCE"
-        echo "Check changelog : $CHECK_CHANGELOG"
+        echo "Version advance  : $VERSION_ADVANCE"
+        echo "Check public API : $CHECK_PUBLIC_API"
+        echo "Check changelog  : $CHECK_CHANGELOG"
     - name: Checkout repository with full history
       uses: actions/checkout@v3
       with:
