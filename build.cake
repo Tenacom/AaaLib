@@ -102,7 +102,7 @@ Task("Release")
             // Update changelog only on non-prerelease
             if (!data.IsPrerelease)
             {
-                if (!context.GetOption<bool>("checkChangelog", true))
+                if (context.GetOption<bool>("checkChangelog", true))
                 {
                     Ensure(
                         context.ChangelogHasUnreleasedChanges(data.ChangelogPath),
