@@ -72,7 +72,7 @@ Task("Release")
         var dupeTagChecked = false;
         try
         {
-            var committed = false;
+            var commit = false;
 
             // Advance version if requested.
             var versionAdvance = context.GetOption<VersionAdvance>("versionAdvance", VersionAdvance.None);
@@ -86,8 +86,7 @@ Task("Release")
                     context.Information($"Version advanced from {previousVersionSpec} to {versionFile.VersionSpec}.");
                     versionFile.Save();
                     _ = context.Exec("git", $"add \"{versionFile.Path.FullPath}\"");
-                    _ = context.Exec("git", $"commit -m \"Change version from {previousVersionSpec} to {versionFile.VersionSpec}\"");
-                    committed = true;
+                    commit = true;
                 }
                 else
                 {
@@ -112,20 +111,15 @@ Task("Release")
                 // Update the changelog and commit the change before building.
                 // This ensures that the Git height is up to date when computing a version for the build artifacts.
                 context.PrepareChangelogForRelease(data);
-
-                Information("Committing updated changelog...");
                 _ = context.Exec("git", $"add \"{data.ChangelogPath.FullPath}\"");
-                _ = context.Exec("git", $"commit -m \"Update changelog\"");
-                committed = true;
+                commit = true;
             }
 
-            if (committed)
+            if (commit)
             {
-                // The commit changed the Git height: update build configuration data to reflect the change.
-                data.Update(context);
-                context.Information($"New version after commit is {data.Version}");
                 context.Information("Committing changed files...");
-                _ = context.Exec("git", $"commit -m \"Prepare for release\"");
+                _ = context.Exec("git", $"commit -m \"Prepare release\"");
+                data.Update(context);
             }
 
             // Ensure that the release tag doesn't already exist.
@@ -143,18 +137,15 @@ Task("Release")
             {
                 // Change the new section's title in the changelog to reflect the actual version.
                 context.UpdateChangelogNewSectionTitle(data);
-
-                // Amend previous commit so Git height doesn't change.
-                context.Information("Amending changelog update commit...");
                 _ = context.Exec("git", $"add \"{data.ChangelogPath.FullPath}\"");
-                _ = context.Exec("git", $"commit --amend -m \"Update changelog\"");
             }
 
-            // Wrap things up: push the commit and deploy artifacts.
-            if (committed)
+            if (commit)
             {
-                Information($"Pushing changes to {data.Remote}...");
-                _ = Exec("git", $"push {data.Remote} {data.Ref}:{data.Ref}");
+                context.Information("Amending commit...");
+                _ = context.Exec("git", $"commit --amend -m \"Prepare release {data.Version}\"");
+                context.Information($"Pushing changes to {data.Remote}...");
+                _ = context.Exec("git", $"push {data.Remote} {data.Ref}:{data.Ref}");
             }
 
             // Publish NuGet packages
