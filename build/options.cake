@@ -13,28 +13,30 @@ using System.Linq;
 /*
  * Summary : Tells whether the specified option is present, either as an argument
  *           or as an environment variable.
- * Params  : name              - The option name.
+ * Params  : context           - The Cake context.
+ *           name              - The option name.
  *           environmentPrefix - An optional prefix for the environment variable name;
  *                               for example, camelCasedOption (prefix = "MYAPP_") -> MYAPP_CAMEL_CASED_OPTION
  * Returns : If an argument with the specified name is present, true;
  *           if an environment variable with the specified name (converted according to environmentPrefix)
  *           is present, true; otherwise, false.
  */
-bool HasOption(string name, string? environmentPrefix = null)
-    => HasArgument(name) || HasEnvironmentVariable(OptionNameToEnvironmentVariableName(name, environmentPrefix));
+static bool HasOption(this ICakeContext context, string name, string? environmentPrefix = null)
+    => context.HasArgument(name) || context.HasEnvironmentVariable(OptionNameToEnvironmentVariableName(name, environmentPrefix));
 
 /*
  * Summary : Gets an option from, in this order:
  *             * a command line argument with the specified name;
  *             * an environment variable with the specified name converted to UNDERSCORE_UPPER_CASE;
  *             * the provided default value.
- * Params  : name         - The option name.
+ * Params  : context      - The Cake context.
+ *           name         - The option name.
  *           defaultValue - The value returned if neither a corresponding argument
  *                          nor environment variable was found.
  */
-T GetOption<T>(string name, T defaultValue)
+static T GetOption<T>(this ICakeContext context, string name, T defaultValue)
     where T : notnull
-    => GetOption<T>(name, null, defaultValue);
+    => context.GetOption<T>(name, null, defaultValue);
 
 /*
  * Summary : Gets an option from, in this order:
@@ -42,23 +44,24 @@ T GetOption<T>(string name, T defaultValue)
  *             * an environment variable with the specified name converted to UNDERSCORE_UPPER_CASE
  *               and optionally prefixed with the specified environmentPrefix;
  *             * the provided default value.
- * Params  : name              - The option name.
+ * Params  : context           - The Cake context.
+ *           name              - The option name.
  *           environmentPrefix - An optional prefix for the environment variable name;
  *                               for example, "camelCasedOption" with an environmentPrefix
  *                               of "MYAPP_" becomes "MYAPP_CAMEL_CASED_OPTION".
  *           defaultValue      - The value returned if neither a corresponding argument
  *                               nor environment variable was found.
  */
-T GetOption<T>(string name, string? environmentPrefix, T defaultValue)
+static T GetOption<T>(this ICakeContext context, string name, string? environmentPrefix, T defaultValue)
     where T : notnull
 {
-    var value = Context.Arguments.GetArguments(name)?.FirstOrDefault();
+    var value = context.Arguments.GetArguments(name)?.FirstOrDefault();
     if (value != null)
     {
         return ConvertOption<T>(value);
     }
 
-    value = Context.Environment.GetEnvironmentVariable(OptionNameToEnvironmentVariableName(name, environmentPrefix));
+    value = context.Environment.GetEnvironmentVariable(OptionNameToEnvironmentVariableName(name, environmentPrefix));
     return value == null ? defaultValue : ConvertOption<T>(value);
 }
 
@@ -68,11 +71,12 @@ T GetOption<T>(string name, string? environmentPrefix, T defaultValue)
  *             * an environment variable with the specified name converted to UNDERSCORE_UPPER_CASE;
  *             * the provided default value.
  *           Throw an exception if the option is not found or has an empty value.
- * Params  : name - The option name.
+ * Params  : context - The Cake context.
+ *           name    - The option name.
  */
-T GetOptionOrFail<T>(string name)
+static T GetOptionOrFail<T>(this ICakeContext context, string name)
     where T : notnull
-    => GetOptionOrFail<T>(name, null);
+    => context.GetOptionOrFail<T>(name, null);
 
 /*
  * Summary : Gets an option from, in this order:
@@ -81,22 +85,23 @@ T GetOptionOrFail<T>(string name)
  *               and optionally prefixed with the specified environmentPrefix;
  *             * the provided default value.
  *           Throw an exception if the option is not found or has an empty value.
- * Params  : name              - The option name.
+ * Params  : context           - The Cake context.
+ *           name              - The option name.
  *           environmentPrefix - An optional prefix for the environment variable name;
  *                               for example, "camelCasedOption" with an environmentPrefix
  *                               of "MYAPP_" becomes "MYAPP_CAMEL_CASED_OPTION".
  */
-T GetOptionOrFail<T>(string name, string? environmentPrefix)
+static T GetOptionOrFail<T>(this ICakeContext context, string name, string? environmentPrefix)
     where T : notnull
 {
-    var value = Context.Arguments.GetArguments(name)?.FirstOrDefault();
+    var value = context.Arguments.GetArguments(name)?.FirstOrDefault();
     if (value != null)
     {
         return ConvertOption<T>(value);
     }
 
     var envName = OptionNameToEnvironmentVariableName(name, environmentPrefix);
-    value = Context.Environment.GetEnvironmentVariable(envName);
+    value = context.Environment.GetEnvironmentVariable(envName);
     if (value != null)
     {
         return ConvertOption<T>(value);

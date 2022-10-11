@@ -12,12 +12,14 @@ using System.Linq;
 
 /*
  * Summary : Gets the name of the current Git branch.
+ * Params  : context - The Cake context.
  * Returns : If HEAD is on a branch, the name of the branch; otherwise, the empty string.
  */
-string GetCurrentGitBranch() => Exec("git", "branch --show-current").FirstOrDefault(string.Empty);
+static string GetCurrentGitBranch(this ICakeContext context) => context.Exec("git", "branch --show-current").FirstOrDefault(string.Empty);
 
 /*
  * Summary : Attempts to get information about the remote repository.
+ * Params  : context - The Cake context.
  * Returns : Remote  - The Git remote name.
  *           HostUrl - The base URL of the Git repository host.
  *           Owner   - The repository owner.
@@ -28,7 +30,7 @@ string GetCurrentGitBranch() => Exec("git", "branch --show-current").FirstOrDefa
  *           - If GITHUB_REPOSITORY is not available, Git remote fetch URLs are parsed for Owner and Name;
  *             remotes "upstream" and "origin" are tested, in that order, in case "origin" is a fork.
  */
-bool TryGetRepositoryInfo(out (string Remote, string HostUrl, string Owner, string Name) result)
+static bool TryGetRepositoryInfo(this ICakeContext context, out (string Remote, string HostUrl, string Owner, string Name) result)
 {
     return TryGetRepositoryInfoFromGitHubActions(out result)
         || TryGetRepositoryInfoFromGitRemote("upstream", out result)
@@ -36,16 +38,16 @@ bool TryGetRepositoryInfo(out (string Remote, string HostUrl, string Owner, stri
 
     bool TryGetRepositoryInfoFromGitHubActions(out (string Remote, string HostUrl, string Owner, string Name) result)
     {
-        var repository = GetOption<string>("githubRepository", string.Empty);
+        var repository = context.GetOption<string>("githubRepository", string.Empty);
         if (string.IsNullOrEmpty(repository))
         {
             result = default;
             return false;
         }
 
-        var hostUrl = GetOptionOrFail<string>("githubServerUrl");
+        var hostUrl = context.GetOptionOrFail<string>("githubServerUrl");
         var segments = repository.Split('/');
-        foreach (var remote in Exec("git", "remote"))
+        foreach (var remote in context.Exec("git", "remote"))
         {
             if (TryGetRepositoryInfoFromGitRemote(remote, out result)
                 && string.Equals(result.HostUrl, hostUrl, StringComparison.Ordinal)
@@ -62,7 +64,7 @@ bool TryGetRepositoryInfo(out (string Remote, string HostUrl, string Owner, stri
 
     bool TryGetRepositoryInfoFromGitRemote(string remote, out (string Remote, string HostUrl, string Owner, string Name) result)
     {
-        if (Exec("git", "remote get-url " + remote, out var output) != 0)
+        if (context.Exec("git", "remote get-url " + remote, out var output) != 0)
         {
             result = default;
             return false;
@@ -105,7 +107,8 @@ bool TryGetRepositoryInfo(out (string Remote, string HostUrl, string Owner, stri
 
 /*
  * Summary : Tells whether a tag exists in the local Git repository.
- * Params  : tag - The tag to check for.
+ * Params  : context - The Cake context.
+ *           tag     - The tag to check for.
  * Returns : True if the tag exists; false otherwise.
  */
-bool GitTagExists(string tag) => Exec("git", "tag").Any(s => string.Equals(tag, s, StringComparison.Ordinal));
+static bool GitTagExists(this ICakeContext context, string tag) => context.Exec("git", "tag").Any(s => string.Equals(tag, s, StringComparison.Ordinal));

@@ -16,11 +16,12 @@ using SysFile = System.IO.File;
 
 /*
  * Summary : Checks the changelog for contents in the "Unreleased changes" section.
- * Params  : changelogPath - The FilePath of the changelog.
+ * Params  : context       - The Cake context.
+ *           changelogPath - The FilePath of the changelog.
  * Returns : If there are any contents (excluding blank lines and sub-section headings)
  *           in the "Unreleased changes" section, true; otherwise, false.
  */
-bool ChangelogHasUnreleasedChanges(FilePath changelogPath)
+static bool ChangelogHasUnreleasedChanges(this ICakeContext context, FilePath changelogPath)
 {
     using (var reader = new StreamReader(changelogPath.FullPath, Encoding.UTF8))
     {
@@ -54,11 +55,12 @@ bool ChangelogHasUnreleasedChanges(FilePath changelogPath)
 /*
  * Summary : Prepares the changelog for a release by moving the contents of the "Unreleased changes" section
  *           to a new section.
- * Params  : data - Build configuratiohn data.
+ * Params  : context - The Cake context.
+ *           data    - Build configuration data.
  */
-void PrepareChangelogForRelease(BuildData data)
+static void PrepareChangelogForRelease(this ICakeContext context, BuildData data)
 {
-    Information("Updating changelog...");
+    context.Information("Updating changelog...");
     var encoding = new UTF8Encoding(false, true);
     var sb = new StringBuilder();
     using (var reader = new StreamReader(data.ChangelogPath.FullPath, encoding))
@@ -192,11 +194,12 @@ void PrepareChangelogForRelease(BuildData data)
 /*
  * Summary : Updates the heading of the first section of the changelog after the "Unreleased changes" section
  *           to reflect a change in the released version.
- * Params  : data - Build configuratiohn data.
+ * Params  : context - The Cake context.
+ *           data    - Build configuratiohn data.
  */
-void UpdateChangelogNewSectionTitle(BuildData data)
+static void UpdateChangelogNewSectionTitle(this ICakeContext context, BuildData data)
 {
-    Information("Updating changelog's new release section title...");
+    context.Information("Updating changelog's new release section title...");
     var encoding = new UTF8Encoding(false, true);
     var sb = new StringBuilder();
     using (var reader = new StreamReader(data.ChangelogPath.FullPath, encoding))
@@ -257,7 +260,7 @@ void UpdateChangelogNewSectionTitle(BuildData data)
     SysFile.WriteAllText(data.ChangelogPath.FullPath, sb.ToString(), encoding);
 }
 
-string MakeChangelogSectionTitle(BuildData data)
+static string MakeChangelogSectionTitle(BuildData data)
 {
     return $"[{data.Version}](https://github.com/{data.RepositoryOwner}/{data.RepositoryName}/releases/tag/{data.Version}) ({DateTime.Now:yyyy-MM-dd})";
 }

@@ -26,9 +26,9 @@ DocFx _docfx = null!;
 
 Task("Default")
     .Description("Default task - Do nothing (but log build configuration data)")
-    .Does<BuildData>(_ => {
-        Information("The default task does nothing. This is intentional.");
-        Information("Use `dotnet cake --description` to see the list of available tasks.");
+    .Does(context => {
+        context.Information("The default task does nothing. This is intentional.");
+        context.Information("Use `dotnet cake --description` to see the list of available tasks.");
     });
 
 Task("_init")

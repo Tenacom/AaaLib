@@ -9,17 +9,7 @@
 
 Setup<BuildData>(context =>
 {
-    var data = CreateBuildData();
-    Information($"Repository        : {data.RepositoryHostUrl}/{data.RepositoryOwner}/{data.RepositoryName}");
-    Information($"Git remote name   : {data.Remote}");
-    Information($"Git reference     : {data.Ref}");
-    Information($"Branch            : {data.Branch}");
-    Information($"Build environment : {(data.IsCI ? "cloud" : "local")}");
-    Information($"Solution          : {data.SolutionPath.GetFilename()}");
-    Information($"Version           : {data.Version}");
-    Information($"Public release    : {(data.IsPublicRelease ? "yes" : "no")}");
-    Information($"Prerelease        : {(data.IsPrerelease ? "yes" : "no")}");
-
+    var data = new BuildData(context);
     if (data.IsCI && !data.IsGitHubAction)
     {
         throw new CakeException(255, "This script can only run locally or in a GitHub Actions workflow.");

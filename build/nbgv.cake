@@ -14,16 +14,17 @@ using System.Text.Json.Nodes;
 
 /*
  * Summary : Gets version information using the NBGV tool.
+ * Params  : context - The Cake context.
  * Returns : Version         - The project version.
  *           Ref             - The Git ref from which we are building.
  *           IsPublicRelease - True if a public release can be built, false otherwise.
  *           IsPrerelease    - True if the project version is tagged as prerelease, false otherwise.
  */
-(string Version, string Ref, bool IsPublicRelease, bool IsPrerelease) GetVersionInformation()
+static (string Version, string Ref, bool IsPublicRelease, bool IsPrerelease) GetVersionInformation(this ICakeContext context)
 {
-    var nbgv = Context.Tools.Resolve("nbgv.dll");
+    var nbgv = context.Tools.Resolve("nbgv.dll");
     var nbgvOutput = new StringBuilder();
-    DotNetExecute(
+    context.DotNetExecute(
         nbgv,
         "get-version --format json",
         new DotNetExecuteSettings {

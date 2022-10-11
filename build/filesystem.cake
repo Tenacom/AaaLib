@@ -9,16 +9,17 @@
 
 /*
  * Summary : Delete a directory, including its contents, if it exists.
- * Params  : directory - The directory to delete.
+ * Params  : context   - The Cake context.
+ *           directory - The directory to delete.
  */
-void DeleteDirectoryIfExists(DirectoryPath directory)
+static void DeleteDirectoryIfExists(this ICakeContext context, DirectoryPath directory)
 {
-    if (!DirectoryExists(directory))
+    if (!context.DirectoryExists(directory))
     {
-        Verbose($"Skipping non-existent directory: {directory}");
+        context.Verbose($"Skipping non-existent directory: {directory}");
         return;
     }
 
-    Information($"Deleting directory: {directory}");
-    DeleteDirectory(directory, new() { Force = false, Recursive = true });
+    context.Information($"Deleting directory: {directory}");
+    context.DeleteDirectory(directory, new() { Force = false, Recursive = true });
 }

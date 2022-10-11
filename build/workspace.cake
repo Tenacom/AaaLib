@@ -10,17 +10,18 @@
 /*
  * Summary : Delete all intermediate and output directories.
  *           On a local machine, also delete Visual Studio and ReSharper caches.
+ * Params  : context - The Cake context.
  */
-void CleanAll(BuildData data)
+static void CleanAll(this ICakeContext context, BuildData data)
 {
-    DeleteDirectoryIfExists(".vs");
-    DeleteDirectoryIfExists("_ReSharper.Caches");
-    DeleteDirectoryIfExists("artifacts");
-    DeleteDirectoryIfExists("logs");
+    context.DeleteDirectoryIfExists(".vs");
+    context.DeleteDirectoryIfExists("_ReSharper.Caches");
+    context.DeleteDirectoryIfExists("artifacts");
+    context.DeleteDirectoryIfExists("logs");
     foreach (var project in data.Solution.Projects)
     {
         var projectDirectory = project.Path.GetDirectory();
-        DeleteDirectoryIfExists(projectDirectory.Combine("bin"));
-        DeleteDirectoryIfExists(projectDirectory.Combine("obj"));
+        context.DeleteDirectoryIfExists(projectDirectory.Combine("bin"));
+        context.DeleteDirectoryIfExists(projectDirectory.Combine("obj"));
     }
 }
