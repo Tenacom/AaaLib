@@ -245,7 +245,7 @@ Task("Release")
         {
             foreach (var path in files)
             {
-                context.Verbose("Git adding {path}...");
+                context.Verbose($"Git adding {path}...");
                 _ = context.Exec(
                     "git",
                     new ProcessArgumentBuilder()
