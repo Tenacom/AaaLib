@@ -102,6 +102,7 @@ static async Task DeleteReleaseAsync(this ICakeContext context, BuildData data, 
  */
 static async Task DispatchWorkflow(this ICakeContext context, BuildData data, string filename, string @ref, object? inputs = null)
 {
+    context.Information($"Dispatching workflow '{filename}' on '{@ref}'...");
     object requestBody = inputs == null
         ? new { @ref = @ref }
         : new { @ref = @ref, inputs = inputs };
