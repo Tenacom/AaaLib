@@ -25,5 +25,7 @@ _ReSharper.*/
 Thumbs.db
 
 # DocFx
-docs/api/
+docs/api/.manifest
+docs/api/*.yml
+docs/obj/
 docs/_site/
