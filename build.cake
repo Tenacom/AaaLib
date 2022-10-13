@@ -166,7 +166,7 @@ Task("Release")
                 {
                     Ensure(
                         context.ChangelogHasUnreleasedChanges(data.ChangelogPath),
-                        $"Chengelog check failed: the \"Unreleased changes\" section is empty or only contains sub-section headings.");
+                        $"Changelog check failed: the \"Unreleased changes\" section is empty or only contains sub-section headings.");
 
                     context.Information($"Changelog check successful: the \"Unreleased changes\" section is not empty.");
                 }
