@@ -158,6 +158,10 @@ Task("Release")
                     context.Information("No public API files were updated.");
                 }
             }
+            else
+            {
+                context.Information("Public API update skipped: not needed on prerelease.");
+            }
 
             // Update changelog only on non-prerelease
             if (!data.IsPrerelease)
@@ -181,12 +185,20 @@ Task("Release")
                 _ = context.Exec("git", $"add \"{data.ChangelogPath.FullPath}\"");
                 commit = true;
             }
+            else
+            {
+                context.Information("Changelog update skipped: not needed on prerelease.");
+            }
 
             if (commit)
             {
                 context.Information("Committing changed files...");
                 _ = context.Exec("git", $"commit -m \"Prepare release\"");
                 data.Update(context);
+            }
+            else
+            {
+                context.Information("Commit skipped: no files changed.");
             }
 
             // Ensure that the release tag doesn't already exist.
@@ -206,6 +218,10 @@ Task("Release")
                 context.UpdateChangelogNewSectionTitle(data);
                 _ = context.Exec("git", $"add \"{data.ChangelogPath.FullPath}\"");
             }
+            else
+            {
+                context.Information("Changelog section title update skipped: not needed on prerelease.");
+            }
 
             if (commit)
             {
@@ -214,13 +230,25 @@ Task("Release")
                 context.Information($"Pushing changes to {data.Remote}...");
                 _ = context.Exec("git", $"push {data.Remote} {data.Ref}:{data.Ref}");
             }
+            else
+            {
+                context.Information("Commit amend skipped: no commit to amend.");
+            }
 
             // Publish NuGet packages
             context.NuGetPushAll(data);
 
             // If this is not a prerelease and we are releasing from the main branch,
             // dispatch a separate workflow to publish documentation.
-            if (!data.IsPrerelease && data.Ref == "main")
+            if (data.IsPrerelease)
+            {
+                context.Information("Documentation update skipped: not needed on prerelease.");
+            }
+            else if (data.Ref != "main")
+            {
+                context.Information($"Documentation update skipped: releasing from '{data.ref}', not 'main'.");
+            }
+            else
             {
                 await context.DispatchWorkflow(data, "deploy-pages.yml", "main");
             }
