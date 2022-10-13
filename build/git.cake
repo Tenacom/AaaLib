@@ -148,6 +148,9 @@ static void GitSetGitHubTokenForRemote(this ICakeContext context, string remote,
     Ensure(!string.IsNullOrEmpty(pushUrl), $"Cannot get Git push URL for '{remote}'.");
     context.Verbose($"Git push URL for '{remote}' is '{pushUrl}'.");
 
+    // This is how actions/checkout builds the extra header
+    // (including the questionable casing of "AUTHORIZATION: basic")
+    // https://github.com/actions/checkout/blob/v3.1.0/src/git-auth-helper.ts#L54-L63
     var authText = "x-access-token:" + token;
     var authBytes = Encoding.UTF8.GetBytes(authText);
     var header = "AUTHORIZATION: basic " + Convert.ToBase64String(authBytes);
