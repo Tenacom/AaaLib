@@ -246,7 +246,7 @@ Task("Release")
             }
             else if (data.Ref != "main")
             {
-                context.Information($"Documentation update skipped: releasing from '{data.ref}', not 'main'.");
+                context.Information($"Documentation update skipped: releasing from '{data.Ref}', not 'main'.");
             }
             else
             {
