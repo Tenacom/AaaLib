@@ -106,7 +106,7 @@ Task("Release")
         var dupeTagChecked = false;
         try
         {
-            var commit = false;
+            var committed = false;
 
             // Advance version if requested.
             var versionAdvance = context.GetOption<VersionAdvance>("versionAdvance", VersionAdvance.None);
@@ -125,9 +125,7 @@ Task("Release")
                 {
                     context.Information($"Version advanced from {previousVersionSpec} to {versionFile.VersionSpec}.");
                     versionFile.Save();
-                    data.Update(context);
-                    _ = context.Exec("git", $"add \"{versionFile.Path.FullPath}\"");
-                    commit = true;
+                    UpdateRepo(versionFile.Path);
                 }
                 else
                 {
@@ -146,16 +144,11 @@ Task("Release")
                 if (modified.Length > 0)
                 {
                     context.Information($"{modified.Length} public API files were modified.");
-                    foreach (var path in modified)
-                    {
-                        _ = context.Exec("git", $"add \"{path.FullPath}\"");
-                    }
-
-                    commit = true;
+                    UpdateRepo(modified);
                 }
                 else
                 {
-                    context.Information("No public API files were updated.");
+                    context.Information("No public API files were modified.");
                 }
             }
             else
@@ -182,23 +175,11 @@ Task("Release")
                 // Update the changelog and commit the change before building.
                 // This ensures that the Git height is up to date when computing a version for the build artifacts.
                 context.PrepareChangelogForRelease(data);
-                _ = context.Exec("git", $"add \"{data.ChangelogPath.FullPath}\"");
-                commit = true;
+                UpdateRepo(data.ChangelogPath);
             }
             else
             {
                 context.Information("Changelog update skipped: not needed on prerelease.");
-            }
-
-            if (commit)
-            {
-                context.Information("Committing changed files...");
-                _ = context.Exec("git", $"commit -m \"Prepare release\"");
-                data.Update(context);
-            }
-            else
-            {
-                context.Information("Commit skipped: no files changed.");
             }
 
             // Ensure that the release tag doesn't already exist.
@@ -216,23 +197,21 @@ Task("Release")
             {
                 // Change the new section's title in the changelog to reflect the actual version.
                 context.UpdateChangelogNewSectionTitle(data);
-                _ = context.Exec("git", $"add \"{data.ChangelogPath.FullPath}\"");
+                UpdateRepo(data.ChangelogPath);
             }
             else
             {
                 context.Information("Changelog section title update skipped: not needed on prerelease.");
             }
 
-            if (commit)
+            if (committed)
             {
-                context.Information("Amending commit...");
-                _ = context.Exec("git", $"commit --amend -m \"Prepare release {data.Version}\"");
-                context.Information($"Pushing changes to {data.Remote}...");
+                context.Information($"Git pushing changes to {data.Remote}...");
                 _ = context.Exec("git", $"push {data.Remote} {data.Ref}:{data.Ref}");
             }
             else
             {
-                context.Information("Commit amend skipped: no commit to amend.");
+                context.Information("Git push skipped: no commit to push.");
             }
 
             // Publish NuGet packages
@@ -261,6 +240,31 @@ Task("Release")
             context.Error(e is CakeException ? e.Message : $"{e.GetType().Name}: {e.Message}");
             await context.DeleteReleaseAsync(data, releaseId, dupeTagChecked ? data.Version : null);
             throw;
+        }
+
+        void UpdateRepo(params FilePath[] files)
+        {
+            foreach (var path in files)
+            {
+                context.Verbose("Git adding {path}...")
+                _ = context.Exec(
+                    "git",
+                    new ProcessArgumentBuilder()
+                        .Append("add")
+                        .AppendQuoted(path.FullPath));
+            }
+
+            context.Information(committed ? "Amending commit..." : "Committing changed files...");
+            var arguments = new PeocessArgumentBuilder().Append("commit");
+            if (committed)
+            {
+                arguments = arguments.Append("--amend");
+            }
+
+            arguments = arguments.Append("-m").AppendQuoted($"Prepare release {data.Version}");
+            _ = context.Exec("git", arguments);
+            data.Update(context);
+            committed = true;
         }
     });
 
