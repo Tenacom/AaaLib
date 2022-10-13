@@ -7,8 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased changes
 
-Initial release.
-
 ### New features
 
 ### Changes to existing features
@@ -16,3 +14,7 @@ Initial release.
 ### Bugs fixed in this release
 
 ### Known problems introduced by this release
+
+## [1.0.47](https://github.com/Tenacom/AaaLib/releases/tag/1.0.47) (2022-10-13)
+
+Initial release.
