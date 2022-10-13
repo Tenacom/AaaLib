@@ -4,6 +4,9 @@ concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: write
+
 on:
   workflow_dispatch:
     inputs:
@@ -36,7 +39,6 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 'true'
       DOTNET_CLI_UI_LANGUAGE: 'en-US'
-      GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
       PRERELEASE_NUGET_SOURCE: 'https://www.myget.org/F/tenacom-preview/api/v3/index.json'
       PRERELEASE_NUGET_KEY: ${{ secrets.MYGET_DEPLOYMENT_KEY }}
       RELEASE_NUGET_SOURCE: 'https://api.nuget.org/v3/index.json'
@@ -54,7 +56,6 @@ jobs:
       uses: actions/checkout@v3
       with:
         fetch-depth: 0 # Checkout with full history so nbgv can compute Git height correctly.
-        token: ${{ secrets.RELEASE_TOKEN }} # Use personal access token so we can push etc.
         persist-credentials: true # We need auth set up in the Cake script
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v3
