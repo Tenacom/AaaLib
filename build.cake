@@ -104,10 +104,9 @@ Task("Release")
         // Create the release as a draft first, so if the token has no permissions we can bail out early
         var releaseId = await context.CreateDraftReleaseAsync(data);
         var dupeTagChecked = false;
+        var committed = false;
         try
         {
-            var committed = false;
-
             // Advance version if requested.
             var versionAdvance = context.GetOption<VersionAdvance>("versionAdvance", VersionAdvance.None);
             if (context.GetOption<bool>("checkPublicApi", true))
