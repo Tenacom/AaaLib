@@ -67,29 +67,8 @@ Task("SetupGitAuth")
     .Description("Setup Git authentication (GitHub Actions only)")
     .WithCriteria<BuildData>(data => data.IsGitHubAction)
     .Does<BuildData>((context, data) => {
-        _ = context.Exec(
-            "git",
-            new ProcessArgumentBuilder()
-                .Append("config")
-                .Append("user.name")
-                .AppendQuoted("Buildvana"));
-
-        _ = context.Exec(
-            "git",
-            new ProcessArgumentBuilder()
-                .Append("config")
-                .Append("user.email")
-                .AppendQuoted("buildvana@tenacom.it"));
-
-        var authText = "x-access-token:" + context.GetOptionOrFail<string>("githubToken");
-        var authBytes = Encoding.UTF8.GetBytes(authText);
-        var header = "AUTHORIZATION: basic " + Convert.ToBase64String(authBytes);
-        _ = context.Exec(
-            "git",
-            new ProcessArgumentBuilder()
-                .Append("config")
-                .Append($"http.{data.RepositoryHostUrl}.extraHeader")
-                .AppendQuoted(header));
+        context.GitSetUserIdentity("Buildvana", "buildvana@tenacom.it");
+        context.GitSetGitHubTokenForRemote(data.Remote, context.GetOptionOrFail<string>("githubToken"));
     });
 
 Task("Release")

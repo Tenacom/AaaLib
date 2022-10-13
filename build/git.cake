@@ -112,3 +112,72 @@ static bool TryGetRepositoryInfo(this ICakeContext context, out (string Remote, 
  * Returns : True if the tag exists; false otherwise.
  */
 static bool GitTagExists(this ICakeContext context, string tag) => context.Exec("git", "tag").Any(s => string.Equals(tag, s, StringComparison.Ordinal));
+
+/*
+ * Summary : Sets Git user name and email.
+ * Params  : context - The Cake context.
+ *           name    - The name of the user.
+ *           email   - The email address of the user.
+ */
+static void GitSetUserIdentity(this ICakeContext context, string name, string email)
+{
+    context.Information("Setting Git user name to '{name}'...");
+    _ = context.Exec(
+        "git",
+        new ProcessArgumentBuilder()
+            .Append("config")
+            .Append("user.name")
+            .AppendQuoted(name));
+
+    context.Information("Setting Git user email to '{email}'...");
+    _ = context.Exec(
+        "git",
+        new ProcessArgumentBuilder()
+            .Append("config")
+            .Append("user.email")
+            .AppendQuoted(email));
+}
+
+static void GitSetGitHubTokenForRemote(this ICakeContext context, string remote, string token)
+{
+    var fetchUrl = GetRemoteUrlOrEmpty(false);
+    Ensure(!string.IsNullOrEmpty(fetchUrl), $"Cannot get Git fetch URL for '{remote}'.");
+    context.Verbose($"Git fetch URL for '{remote}' is '{fetchUrl}'.");
+
+    var pushUrl = GetRemoteUrlOrEmpty(true);
+    Ensure(!string.IsNullOrEmpty(pushUrl), $"Cannot get Git push URL for '{remote}'.");
+    context.Verbose($"Git push URL for '{remote}' is '{pushUrl}'.");
+
+    var authText = "x-access-token:" + token;
+    var authBytes = Encoding.UTF8.GetBytes(authText);
+    var header = "AUTHORIZATION: basic " + Convert.ToBase64String(authBytes);
+
+    SetAuthHeaderForUrl(fetchUrl, header);
+    if (!string.Equals(fetchUrl, pushUrl, StringComparison.Ordinal))
+    {
+        SetAuthHeaderForUrl(pushUrl, header);
+    }
+
+    string GetRemoteUrlOrEmpty(bool push)
+    {
+        try
+        {
+            return context.Exec("git", $"remote get-url {(push ? "--push " : null)}{remote}").FirstOrDefault(string.Empty);
+        }
+        catch (CakeException)
+        {
+            return string.Empty;
+        }
+    }
+
+    void SetAuthHeaderForUrl(string url, string extraHeader)
+    {
+        context.Information($"Setting authorization header for '{url}'...");
+        _ = context.Exec(
+            "git",
+            new ProcessArgumentBuilder()
+                .Append("config")
+                .Append($"http.{url}.extraHeader")
+                .AppendQuoted(extraHeader));
+    }
+}
