@@ -20,6 +20,9 @@
 
 #nullable enable
 
+using System;
+using System.Text;
+
 // =============================================================================================
 // TASKS
 // =============================================================================================
@@ -60,8 +63,38 @@ Task("Pack")
     .IsDependentOn("Test")
     .Does<BuildData>((context, data) => context.PackSolution(data, false, false));
 
+Task("SetupGitAuth")
+    .Description("Setup Git authentication (GitHub Actions only)")
+    .WithCriteria<BuildData>(data => data.IsGitHubAction)
+    .Does<BuildData>((context, data) => {
+        _ = context.Exec(
+            "git",
+            new ProcessArgumentBuilder()
+                .Append("config")
+                .Append("user.name")
+                .AppendQuoted("Buildvana"));
+
+        _ = context.Exec(
+            "git",
+            new ProcessArgumentBuilder()
+                .Append("config")
+                .Append("user.email")
+                .AppendQuoted("buildvana@tenacom.it"));
+
+        var authText = "x-access-token:" + context.GetOptionOrFail<string>("githubToken");
+        var authBytes = Encoding.UTF8.GetBytes(authText);
+        var header = "AUTHORIZATION: basic " + Convert.ToBase64String(authBytes);
+        _ = context.Exec(
+            "git",
+            new ProcessArgumentBuilder()
+                .Append("config")
+                .Append($"http.{data.RepositoryHostUrl}.extraHeader")
+                .AppendQuoted(header));
+    });
+
 Task("Release")
     .Description("Publish a new public release (CI only)")
+    .IsDependentOn("SetupGitAuth")
     .Does<BuildData>(async (context, data) => {
 
         // Preliminary checks
