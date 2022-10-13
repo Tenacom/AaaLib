@@ -246,7 +246,7 @@ Task("Release")
         {
             foreach (var path in files)
             {
-                context.Verbose("Git adding {path}...")
+                context.Verbose("Git adding {path}...");
                 _ = context.Exec(
                     "git",
                     new ProcessArgumentBuilder()
@@ -255,7 +255,7 @@ Task("Release")
             }
 
             context.Information(committed ? "Amending commit..." : "Committing changed files...");
-            var arguments = new PeocessArgumentBuilder().Append("commit");
+            var arguments = new ProcessArgumentBuilder().Append("commit");
             if (committed)
             {
                 arguments = arguments.Append("--amend");
