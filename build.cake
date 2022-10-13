@@ -125,6 +125,7 @@ Task("Release")
                 {
                     context.Information($"Version advanced from {previousVersionSpec} to {versionFile.VersionSpec}.");
                     versionFile.Save();
+                    data.Update(context);
                     _ = context.Exec("git", $"add \"{versionFile.Path.FullPath}\"");
                     commit = true;
                 }
