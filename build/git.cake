@@ -121,7 +121,7 @@ static bool GitTagExists(this ICakeContext context, string tag) => context.Exec(
  */
 static void GitSetUserIdentity(this ICakeContext context, string name, string email)
 {
-    context.Information("Setting Git user name to '{name}'...");
+    context.Information($"Setting Git user name to '{name}'...");
     _ = context.Exec(
         "git",
         new ProcessArgumentBuilder()
@@ -129,7 +129,7 @@ static void GitSetUserIdentity(this ICakeContext context, string name, string em
             .Append("user.name")
             .AppendQuoted(name));
 
-    context.Information("Setting Git user email to '{email}'...");
+    context.Information($"Setting Git user email to '{email}'...");
     _ = context.Exec(
         "git",
         new ProcessArgumentBuilder()
