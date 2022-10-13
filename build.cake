@@ -185,7 +185,7 @@ Task("Release")
             if (committed)
             {
                 context.Information($"Git pushing changes to {data.Remote}...");
-                _ = context.Exec("git", $"push {data.Remote} {data.Ref}:{data.Ref}");
+                _ = context.Exec("git", $"push {data.Remote} HEAD");
             }
             else
             {
