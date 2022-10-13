@@ -1,28 +1,26 @@
-area-aaalib:
-  - "src/AaaLib/**/*.cs"
+'area-aaalib':
+  - "src/AaaLib/**/*"
 
-area-build:
-  - "**/*.sln"
-  - "**/*.csproj"
-  - "**/*.props"
-  - "**/*.targets"
+'area:build':
   - "**/*.cake"
+  - "build/**/*"
 
-area-repo:
+'area:repo':
+  - "*.sln"
   - ".github/*.yml"
   - ".github/**/*.md"
 
-area-ci:
+'area:ci':
   - ".github/workflows/**/*"
   - "lgtm.yml"
 
-area-deps:
+'area:deps':
   - "**/Directory.Packages.props"
   - Directory.Build.props
   - Directory.Build.targets
   - "src/Buildvana.Sdk/Sdk/PackageVersions.props"
 
-area-docs:
+'area:docs':
   - "docs/**/*"
   - "**/CHANGELOG.md"
   - "**/LICENSE"
