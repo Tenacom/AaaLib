@@ -22,22 +22,11 @@ using Octokit;
 static async Task<int> CreateDraftReleaseAsync(this ICakeContext context, BuildData data)
 {
     var tag = data.Version;
-    context.Information($"Generating release notes for {tag}...");
     var client = context.CreateGitHubClient();
-    var releaseNotesRequest = new GenerateReleaseNotesRequest(tag)
-    {
-        TargetCommitish = data.Branch,
-    };
-
-    var generateNotesResponse = await client.Repository.Release.GenerateReleaseNotes(data.RepositoryOwner, data.RepositoryName, releaseNotesRequest).ConfigureAwait(false);
-    var body = $"We also have a [human-curated changelog]({data.RepositoryHostUrl}/{data.RepositoryOwner}/{data.RepositoryName}/blob/{tag}/CHANGELOG.md).\n\n---\n\n"
-             + generateNotesResponse.Body;
-
-    context.Information($"Creating a draft release for {tag}...");
+    context.Information($"Creating a provisional draft release...");
     var newRelease = new NewRelease(tag)
     {
-        Name = tag,
-        Body = body,
+        Name = $"{tag} [provisional]",
         TargetCommitish = data.Branch,
         Prerelease = data.IsPrerelease,
         Draft = true,
@@ -54,20 +43,31 @@ static async Task<int> CreateDraftReleaseAsync(this ICakeContext context, BuildD
  *           id      - The ID of the release.
  * Returns : A Task that represents the ongoing operation.
  */
-static Task PublishReleaseAsync(this ICakeContext context, BuildData data, int id)
+static async Task PublishReleaseAsync(this ICakeContext context, BuildData data, int id)
 {
-    // The version could have changed, for example if we updated the changelog, thus altering the Git height.
     var tag = data.Version;
+    var client = context.CreateGitHubClient();
+    context.Information($"Generating release notes for {tag}...");
+    var releaseNotesRequest = new GenerateReleaseNotesRequest(tag)
+    {
+        TargetCommitish = data.Branch,
+    };
+
+    var generateNotesResponse = await client.Repository.Release.GenerateReleaseNotes(data.RepositoryOwner, data.RepositoryName, releaseNotesRequest).ConfigureAwait(false);
+    var body = $"We also have a [human-curated changelog]({data.RepositoryHostUrl}/{data.RepositoryOwner}/{data.RepositoryName}/blob/main/CHANGELOG.md).\n\n---\n\n"
+             + generateNotesResponse.Body;
+
     context.Information($"Publishing the previously created release as {tag}...");
     var update = new ReleaseUpdate
     {
         TagName = tag,
         Name = tag,
+        Body = body,
+        Prerelease = data.IsPrerelease,
         Draft = false,
     };
 
-    var client = context.CreateGitHubClient();
-    return client.Repository.Release.Edit(data.RepositoryOwner, data.RepositoryName, id, update);
+    _ = await client.Repository.Release.Edit(data.RepositoryOwner, data.RepositoryName, id, update).ConfigureAwait(false);
 }
 
 /*
