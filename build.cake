@@ -165,7 +165,13 @@ Task("Release")
                 {
                     Ensure(
                         context.ChangelogHasUnreleasedChanges(data.ChangelogPath),
-                        $"The \"Unreleased changes\" section of the changelog is empty or only contains sub-section headings.");
+                        $"Chengelog check failed: the \"Unreleased changes\" section is empty or only contains sub-section headings.");
+
+                    context.Information($"Changelog check successful: the \"Unreleased changes\" section is not empty.");
+                }
+                else
+                {
+                    context.Information($"Changelog check skipped: option 'checkChangelog' is false.");
                 }
 
                 // Update the changelog and commit the change before building.
