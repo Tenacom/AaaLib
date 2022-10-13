@@ -63,22 +63,16 @@ Task("Pack")
     .IsDependentOn("Test")
     .Does<BuildData>((context, data) => context.PackSolution(data, false, false));
 
-Task("SetupGitAuth")
-    .Description("Setup Git authentication (GitHub Actions only)")
-    .WithCriteria<BuildData>(data => data.IsGitHubAction)
-    .Does<BuildData>((context, data) => {
-        context.GitSetUserIdentity("Buildvana", "buildvana@tenacom.it");
-        context.GitSetGitHubTokenForRemote(data.Remote, context.GetOptionOrFail<string>("githubToken"));
-    });
-
 Task("Release")
     .Description("Publish a new public release (CI only)")
-    .IsDependentOn("SetupGitAuth")
     .Does<BuildData>(async (context, data) => {
 
         // Preliminary checks
         Ensure(data.IsCI, "The Release target cannot run on a local system.");
         Ensure(data.IsPublicRelease, "Cannot create a release from the current branch.");
+
+        // Identify Git user for later push if needed
+        context.GitSetUserIdentity("Buildvana", "buildvana@tenacom.it");
 
         // Create the release as a draft first, so if the token has no permissions we can bail out early
         var releaseId = await context.CreateDraftReleaseAsync(data);

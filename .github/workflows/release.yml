@@ -55,6 +55,7 @@ jobs:
       with:
         fetch-depth: 0 # Checkout with full history so nbgv can compute Git height correctly.
         token: ${{ secrets.RELEASE_TOKEN }} # Use personal access token so we can push etc.
+        persist-credentials: true # We need auth set up in the Cake script
     - name: Setup .NET SDK
       uses: actions/setup-dotnet@v3
       with:
