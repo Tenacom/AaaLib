@@ -25,6 +25,7 @@ _ReSharper.*/
 Thumbs.db
 
 # DocFx
+docs/globalMetadata.json
 docs/api/.manifest
 docs/api/*.yml
 docs/obj/

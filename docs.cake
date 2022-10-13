@@ -18,6 +18,11 @@
 
 #nullable enable
 
+using System.Collections.Generic;
+using System.Text.Json;
+
+using SysFile = System.IO.File;
+
 // =============================================================================================
 // TASKS
 // =============================================================================================
@@ -35,6 +40,23 @@ Task("_init")
     .Description("Initialize DocFx support in script")
     .Does<BuildData>((context, data) => {
         _docfx = new DocFx(context, data, "docs");
+        var globalMetadata= new
+        {
+            RepoOwner = data.RepositoryOwner,
+            RepoName = data.RepositoryName,
+            RepoUrl = $"{data.RepositoryHostUrl}/{data.RepositoryOwner}/{data.RepositoryName}",
+            RepoVersion = data.Version,
+        };
+
+        var options = new JsonSerializerOptions
+        {
+            WriteIndented = true,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        };
+
+        var jsonPath = new DirectoryPath("docs").CombineWithFilePath("globalMetadata.json");
+        using var stream = SysFile.Create(jsonPath.FullPath);
+        JsonSerializer.Serialize(stream, globalMetadata, options);
     });
 
 Task("Metadata")
