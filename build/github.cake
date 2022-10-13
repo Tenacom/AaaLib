@@ -86,7 +86,18 @@ static async Task DeleteReleaseAsync(this ICakeContext context, BuildData data, 
     if (tagName != null)
     {
         var reference = "refs/tags/" + tagName;
-        context.Information($"Deleting {reference} in GitHub repository...");
+        context.Information($"Looking for reference '{reference}' in GitHub repository...");
+        try
+        {
+            _ = await client.Git.Reference.Get(data.RepositoryOwner, data.RepositoryName, reference).ConfigureAwait(false);
+        }
+        catch (NotFoundException)
+        {
+            context.Information($"Reference '{reference}' not found in GitHub repository.");
+            return;
+        }
+
+        context.Information($"Deleting reference '{reference}' in GitHub repository...");
         await client.Git.Reference.Delete(data.RepositoryOwner, data.RepositoryName, reference).ConfigureAwait(false);
     }
 }
