@@ -24,7 +24,12 @@
     "globalMetadata": {
       "_appName": "AaaLib",
       "_appTitle": "AaaLib documentation",
-      "_gitContribute": { "branch": "main" }
+      "_gitContribute": { "branch": "main" },
+      "_enableSearch": true,
+      "_disableSideFilter": false,
+      "_enableNewTab": true,
+      "_disableContribution": false,
+      "_disableBreadcrumb": false
     },
     "globalMetadataFiles": [ "globalMetadata.json" ],
     "fileMetadataFiles": [],
