@@ -24,12 +24,11 @@
     "globalMetadata": {
       "_appName": "AaaLib",
       "_appTitle": "AaaLib documentation",
-      "_appFooter": "<span>Copyright © Tenacom and <a href=\"https://github.com/Tenacom/AaaLib/#contributors\" target=\"_new\">contributors</a>.<br>Licensed under <a href=\"https://github.com/Tenacom/AaaLib/blob/main/LICENSE\" target=\"_new\">MIT license</a></span>",
       "_gitContribute": { "branch": "main" }
     },
     "globalMetadataFiles": [ "globalMetadata.json" ],
     "fileMetadataFiles": [],
-    "template": [ "default", "templates/singulinkfx", "plugins/memberpage.2.59.4/content" ],
+    "template": [ "default", "templates/singulinkfx", "templates/tenacom", "plugins/memberpage.2.59.4/content" ],
     "postProcessors": [],
     "markdownEngineName": "markdig",
     "noLangKeyword": false,
