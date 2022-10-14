@@ -15,7 +15,7 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 'true'
       DOTNET_CLI_UI_LANGUAGE: 'en-US'
-      CAKE_VERBOSITY: ${{ fromJson('["Normal","Diagnostic"]')[runner.debug || 0] }}
+      CAKE_VERBOSITY: ${{ runner.debug && 'Diagnostic' || 'Normal' }}
     steps:
     - name: Checkout repository with full history
       uses: actions/checkout@v3
