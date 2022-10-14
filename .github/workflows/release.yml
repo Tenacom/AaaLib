@@ -28,9 +28,18 @@ on:
         required: false
         default: true
         type: boolean
+      cakeVerbosity:
+        description: 'Cake verbosity'
+        required: true
+        type: choice
+        default: 'Normal'
+        options:
+        - Normal
+        - Verbose
+        - Diagnostic
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     env:
       DOTNET_NOLOGO: 'true'
       DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
@@ -44,12 +53,15 @@ jobs:
       VERSION_ADVANCE: ${{ inputs.versionAdvance }}
       CHECK_PUBLIC_API: ${{ inputs.checkPublicApi }}
       CHECK_CHANGELOG: ${{ inputs.checkChangelog }}
+      CAKE_VERBOSITY: ${{ fromJson('["' + inputs.cakeVerbosity + '","Diagnostic"]')[runner.debug || 0] }}
     steps:
     - name: Log workflow inputs
+      shell: cmd
       run: |
-        echo "Version advance  : $VERSION_ADVANCE"
-        echo "Check public API : $CHECK_PUBLIC_API"
-        echo "Check changelog  : $CHECK_CHANGELOG"
+        echo Version advance  : %VERSION_ADVANCE%
+        echo Check public API : %CHECK_PUBLIC_API%
+        echo Check changelog  : %CHECK_CHANGELOG%
+        echo Cake verbosity   : %CAKE_VERBOSITY%
     - name: Checkout repository with full history
       uses: actions/checkout@v3
       with:
@@ -61,9 +73,8 @@ jobs:
       with:
         global-json-file: global.json
     - name: Restore .NET tools
+      shell: cmd
       run: dotnet tool restore
-    - name: Set Cake verbosity to Diagnostic if debug logging is enabled
-      if: ${{ runner.debug }}
-      run: echo "CAKE_PARAMS=--verbosity=Diagnostic" >> $GITHUB_ENV
     - name: Run build script
-      run: dotnet cake --target Release $CAKE_PARAMS
+      shell: cmd
+      run: dotnet cake --target Release --verbosity %CAKE_VERBOSITY%
