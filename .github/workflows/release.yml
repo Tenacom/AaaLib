@@ -53,7 +53,7 @@ jobs:
       VERSION_ADVANCE: ${{ inputs.versionAdvance }}
       CHECK_PUBLIC_API: ${{ inputs.checkPublicApi }}
       CHECK_CHANGELOG: ${{ inputs.checkChangelog }}
-      CAKE_VERBOSITY: ${{ runner.debug && 'Diagnostic' || inputs.cakeVerbosity || 'Normal' }}
+      CAKE_VERBOSITY: ${{ runner.debug == '1' && 'Diagnostic' || inputs.cakeVerbosity || 'Normal' }}
     steps:
     - name: Log workflow inputs
       shell: cmd
