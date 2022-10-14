@@ -233,7 +233,7 @@ Task("Release")
                 arguments = arguments.Append("--amend");
             }
 
-            arguments = arguments.Append("-m").AppendQuoted($"Prepare release {data.Version}");
+            arguments = arguments.Append("-m").AppendQuoted($"Prepare release {data.Version} [skip ci]");
             _ = context.Exec("git", arguments);
             data.Update(context);
             committed = true;
