@@ -33,7 +33,7 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 'true'
       DOTNET_CLI_UI_LANGUAGE: 'en-US'
-      CAKE_VERBOSITY: ${{ runner.debug == '1' && 'Diagnostic' || inputs.cakeVerbosity || 'Normal' }}
+      CAKE_VERBOSITY: ${{ inputs.cakeVerbosity }}
     steps:
     - name: Checkout repository with full history
       uses: actions/checkout@v3
@@ -48,7 +48,10 @@ jobs:
       run: dotnet tool restore
     - name: Run Cake script to build documentation
       shell: cmd
-      run: dotnet cake docs.cake --target All --verbosity %CAKE_VEBOSITY%
+      run: |
+        if [%CAKE_VERBOSITY%]==[] set CAKE_VERBOSITY=Normal
+        if [%RUNNER_DEBUG%]==[1] set CAKE_VERBOSITY=Diagnostic
+        dotnet cake docs.cake --target All --verbosity %CAKE_VERBOSITY%
     - name: Setup GitHub Pages
       uses: actions/configure-pages@v2
     - name: Upload documentation artifact

@@ -48,7 +48,13 @@ jobs:
     - name: Restore .NET tools
       run: dotnet tool restore
     - name: Build solution
-      run: dotnet cake --target Build --verbosity $CAKE_VERBOSITY
+      run: |
+        if test "$RUNNER_DEBUG" == "1"; then
+          CAKE_VERBOSITY="Diagnostic"
+        elif test -z "$CAKE_VERBOSITY"; then
+          CAKE_VERBOSITY="Normal"
+        fi
+        dotnet cake --target Build --verbosity $CAKE_VERBOSITY
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
       with:

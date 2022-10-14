@@ -15,7 +15,6 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 'true'
       DOTNET_CLI_UI_LANGUAGE: 'en-US'
-      CAKE_VERBOSITY: ${{ runner.debug == '1' && 'Diagnostic' || 'Normal' }}
     steps:
     - name: Checkout repository with full history
       uses: actions/checkout@v3
@@ -30,4 +29,7 @@ jobs:
       run: dotnet tool restore
     - name: Run build script
       shell: cmd
-      run: dotnet cake --target Pack --verbosity %CAKE_VERBOSITY%
+      run: |
+        if [%CAKE_VERBOSITY%]==[] set CAKE_VERBOSITY=Normal
+        if [%RUNNER_DEBUG%]==[1] set CAKE_VERBOSITY=Diagnostic
+        dotnet cake --target Pack --verbosity %CAKE_VERBOSITY%

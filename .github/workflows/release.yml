@@ -53,7 +53,7 @@ jobs:
       VERSION_ADVANCE: ${{ inputs.versionAdvance }}
       CHECK_PUBLIC_API: ${{ inputs.checkPublicApi }}
       CHECK_CHANGELOG: ${{ inputs.checkChangelog }}
-      CAKE_VERBOSITY: ${{ runner.debug == '1' && 'Diagnostic' || inputs.cakeVerbosity || 'Normal' }}
+      CAKE_VERBOSITY: ${{ inputs.cakeVerbosity }}
     steps:
     - name: Log workflow inputs
       shell: cmd
@@ -77,4 +77,7 @@ jobs:
       run: dotnet tool restore
     - name: Run build script
       shell: cmd
-      run: dotnet cake --target Release --verbosity %CAKE_VERBOSITY%
+      run: |
+        if [%CAKE_VERBOSITY%]==[] set CAKE_VERBOSITY=Normal
+        if [%RUNNER_DEBUG%]==[1] set CAKE_VERBOSITY=Diagnostic
+        dotnet cake --target Release --verbosity %CAKE_VERBOSITY%
