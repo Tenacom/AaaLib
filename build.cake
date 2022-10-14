@@ -195,9 +195,9 @@ Task("Release")
             {
                 context.Information("Documentation update skipped: not needed on prerelease.");
             }
-            else if (data.Ref != "main")
+            else if (data.Branch != "main")
             {
-                context.Information($"Documentation update skipped: releasing from '{data.Ref}', not 'main'.");
+                context.Information($"Documentation update skipped: releasing from '{data.Branch}', not 'main'.");
             }
             else
             {
