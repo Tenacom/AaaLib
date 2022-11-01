@@ -3,10 +3,10 @@
   <!-- Branding, ownership, licensing, project information -->
   <PropertyGroup>
     <Product>AaaLib</Product>
-    <Authors>Riccardo De Agostini</Authors>
+    <Authors>Tenacom and contributors</Authors>
     <Owners>Tenacom</Owners>
     <Company>Tenacom</Company>
-    <Copyright>Copyright (C) $(Company)</Copyright>
+    <Copyright>Copyright (c) $(Authors)</Copyright>
     <Trademark />
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://github.com/Tenacom/AaaLib</PackageProjectUrl>
