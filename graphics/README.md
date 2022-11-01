@@ -21,7 +21,7 @@ Related files:
 
 Graphic header for README file.
 
-Uses the following material: [Logo](#logo); [Repo](#repo); [Pragati Narrow](#pragati-narrow).
+Uses the following material: [SquareLogo](#squarelogo); [Repo](#repo); [Pragati Narrow](#pragati-narrow).
 
 Related files:
 
@@ -32,7 +32,7 @@ Related files:
 
 Social card for GitHub project.
 
-Uses the following material: [Logo](#logo); [Repo](#repo); [Pragati Narrow](#pragati-narrow); [Courier Prime](#courier-prime).
+Uses the following material: [SquareLogo](#squarelogo); [Repo](#repo); [Pragati Narrow](#pragati-narrow); [Courier Prime](#courier-prime).
 
 Related files:
 
