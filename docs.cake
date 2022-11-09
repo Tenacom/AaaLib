@@ -3,6 +3,7 @@
 
 #load "./build/BuildData.cake"
 #load "./build/DocFx.cake"
+#load "./build/dotnet.cake"
 #load "./build/environment.cake"
 #load "./build/fail.cake"
 #load "./build/filesystem.cake"
@@ -59,9 +60,14 @@ Task("_init")
         JsonSerializer.Serialize(stream, globalMetadata, options);
     });
 
+Task("_build")
+    .Description("Build solution to get correct metadata")
+    .Does<BuildData>((context, data) => context.BuildSolution(data, true));
+
 Task("Metadata")
     .Description("Generate documentation metadata from sources")
     .IsDependentOn("_init")
+    .IsDependentOn("_build")
     .Does<BuildData>(_ => _docfx.Metadata());
 
 Task("Build")
