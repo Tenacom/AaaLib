@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "- Configuration", "- Config
 		.globalconfig = .globalconfig
 		build.cake = build.cake
 		Common.props = Common.props
+		Common.targets = Common.targets
 		NuGet.config = NuGet.config
 		stylecop.json = stylecop.json
 		version.json = version.json
