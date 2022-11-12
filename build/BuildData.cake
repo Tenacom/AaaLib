@@ -24,6 +24,7 @@ sealed class BuildData
         var solution = context.ParseSolution(solutionPath);
         var configuration = context.Argument("configuration", "Release");
         var artifactsPath = new DirectoryPath("artifacts").Combine(configuration);
+        var testResultsPath = new DirectoryPath("TestResults");
         var isGitHubAction = context.EnvironmentVariable<bool>("GITHUB_ACTIONS", false);
         var isCI = isGitHubAction
             || context.EnvironmentVariable<bool>("CI", false)
@@ -51,6 +52,7 @@ sealed class BuildData
         Ref = @ref;
         Branch = branch;
         ArtifactsPath = artifactsPath;
+        TestResultsPath = testResultsPath;
         ChangelogPath = changelogPath;
         SolutionPath = solutionPath;
         Solution = solution;
@@ -109,6 +111,11 @@ sealed class BuildData
      * Summary : Gets the path of the directory where build artifacts are stored.
      */
     public DirectoryPath ArtifactsPath { get; }
+
+    /*
+     * Summary : Gets the path of the directory where test results and coverage reports are stored.
+     */
+    public DirectoryPath TestResultsPath { get; }
 
     /*
      * Summary : Gets the path of the CHANGELOG.md file.

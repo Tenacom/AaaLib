@@ -59,7 +59,7 @@ Task("Build")
 Task("Test")
     .Description("Build all projects and run tests")
     .IsDependentOn("Build")
-    .Does<BuildData>((context, data) => context.TestSolution(data, false, false));
+    .Does<BuildData>((context, data) => context.TestSolution(data, false, false, true));
 
 Task("Pack")
     .Description("Build all projects, run tests, and prepare build artifacts")
@@ -165,7 +165,7 @@ Task("Release")
 
             context.RestoreSolution(data);
             context.BuildSolution(data, false);
-            context.TestSolution(data, false, false);
+            context.TestSolution(data, false, false, false);
             context.PackSolution(data, false, false);
 
             if (!data.IsPrerelease)
