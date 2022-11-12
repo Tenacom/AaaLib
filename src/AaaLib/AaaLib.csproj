@@ -14,7 +14,7 @@
     https://learn.microsoft.com/en-us/nuget/reference/errors-and-warnings/nu5104
   -->
   <ItemGroup>
-    <PackageReference Include="PolyKit.Embedded" NoWarn="NU5104" />
+    <PackageReference Include="PolyKit" NoWarn="NU5104" />
   </ItemGroup>
 
 </Project>
