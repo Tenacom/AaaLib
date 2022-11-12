@@ -7,6 +7,12 @@
       "commands": [
         "dotnet-cake"
       ]
+    },
+    "nbgv": {
+      "version": "3.5.119",
+      "commands": [
+        "nbgv"
+      ]
     }
   }
 }
