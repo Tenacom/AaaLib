@@ -86,6 +86,6 @@ jobs:
       uses: codecov/codecov-action@v3
       with:
         working-directory: ./TestResults/
-        files: coverage.cobertura.xml
+        files: Cobertura.xml
         name: v${{ steps.build.outputs.version }}
         verbose: true
