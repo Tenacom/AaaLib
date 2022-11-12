@@ -85,7 +85,7 @@ jobs:
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
       with:
-        directory: ./TestResults/
-        files: ./coverage.cobertura.xml
+        working-directory: ./TestResults/
+        files: coverage.cobertura.xml
         name: ${{ steps.build.outputs.version }}
         verbose: true
