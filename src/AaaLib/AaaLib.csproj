@@ -15,6 +15,7 @@
   -->
   <ItemGroup>
     <PackageReference Include="Louis" NoWarn="NU5104" />
+    <PackageReference Include="PolyKit.Embedded" NoWarn="NU5104" />
   </ItemGroup>
 
 </Project>
