@@ -51,16 +51,33 @@ static void BuildSolution(this ICakeContext context, BuildData data, bool restor
  *           data    - Build configuration data.
  *           restore - true to restore NuGet packages before testing, false otherwise.
  *           build   - true to build the solution before testing, false otherwise.
+ *           collect - true to collect coverage data with Coverlet
+ * Remarks : If successful, this method will copy coverage reports to the test results directory
+ *           from the temporary directory created by VSTest.
  */
-static void TestSolution(this ICakeContext context, BuildData data, bool restore, bool build)
+static void TestSolution(this ICakeContext context, BuildData data, bool restore, bool build, bool collect)
 {
-    context.Information($"Running tests (restore = {restore}, build = {build})...");
+    context.Information($"Running tests (restore = {restore}, build = {build}, collect = {collect})...");
     context.DotNetTest(data.SolutionPath.FullPath, new() {
         Configuration = data.Configuration,
         NoBuild = !build,
         NoLogo = true,
         NoRestore = !restore,
+        ArgumentCustomization = args => collect
+            ? args.Append("--collect:\"XPlat Code Coverage\"")
+            : args,
     });
+
+    var vsTestDirectory = context.GetSubDirectories(data.TestResultsPath)
+        .MaxBy(dir => SysDirectory.GetLastWriteTime(dir.FullPath).Ticks);
+
+    if (vsTestDirectory == null)
+    {
+        // No worries - there probably were no tests to run.
+        return;
+    }
+
+    context.CopyFiles(SysDirectory.GetFiles(vsTestDirectory.FullPath), data.TestResultsPath);
 }
 
 /*
