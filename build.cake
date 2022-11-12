@@ -215,6 +215,12 @@ Task("Release")
 
             // Last but not least, publish the release.
             await context.PublishReleaseAsync(data, releaseId);
+
+            // Set outputs for subsequent steps in GitHub Actions
+            if (data.IsGitHubAction)
+            {
+                context.SetActionsStepOutput("version", data.Version);
+            }
         }
         catch (Exception e)
         {

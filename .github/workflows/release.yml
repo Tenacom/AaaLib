@@ -76,8 +76,16 @@ jobs:
       shell: cmd
       run: dotnet tool restore
     - name: Run build script
+      id: build
       shell: cmd
       run: |
         if [%CAKE_VERBOSITY%]==[] set CAKE_VERBOSITY=Normal
         if [%RUNNER_DEBUG%]==[1] set CAKE_VERBOSITY=Diagnostic
         dotnet cake --target Release --verbosity %CAKE_VERBOSITY%
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        directory: ./TestResults/
+        files: ./coverage.cobertura.xml
+        name: ${{ steps.build.outputs.version }}
+        verbose: true
