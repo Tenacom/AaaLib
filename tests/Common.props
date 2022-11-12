@@ -1,0 +1,14 @@
+<Project>
+
+  <PropertyGroup>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UsePublicApiAnalyzers>false</UsePublicApiAnalyzers>
+    <RunSettingsFilePath>$(MSBuildThisFileDirectory).runsettings</RunSettingsFilePath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);IDE0022</NoWarn> <!-- Use expression body for methods -->
+    <NoWarn>$(NoWarn);IDE0058</NoWarn> <!-- Expression value is never used -->
+  </PropertyGroup>
+
+</Project>

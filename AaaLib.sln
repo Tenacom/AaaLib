@@ -34,6 +34,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "- Dependencies", "- Depende
 		global.json = global.json
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{28606732-7D0B-4F39-85E1-99AEDC33B6FA}"
+	ProjectSection(SolutionItems) = preProject
+		tests\Common.props = tests\Common.props
+		tests\default.runsettings = tests\default.runsettings
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AaaLibTests", "tests\AaaLibTests\AaaLibTests.csproj", "{21A68D5C-D88D-4BC1-9EA1-B47BC93CB00C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,12 +52,17 @@ Global
 		{95A8F3A1-F627-4D18-B95B-D1AC8DA0A3A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95A8F3A1-F627-4D18-B95B-D1AC8DA0A3A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95A8F3A1-F627-4D18-B95B-D1AC8DA0A3A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21A68D5C-D88D-4BC1-9EA1-B47BC93CB00C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21A68D5C-D88D-4BC1-9EA1-B47BC93CB00C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21A68D5C-D88D-4BC1-9EA1-B47BC93CB00C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21A68D5C-D88D-4BC1-9EA1-B47BC93CB00C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{95A8F3A1-F627-4D18-B95B-D1AC8DA0A3A8} = {6FBB93DC-0138-41E4-B829-9EA968B5BDDE}
+		{21A68D5C-D88D-4BC1-9EA1-B47BC93CB00C} = {28606732-7D0B-4F39-85E1-99AEDC33B6FA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BA25D2EB-96B7-41DB-A4A6-7809ABA211F6}
