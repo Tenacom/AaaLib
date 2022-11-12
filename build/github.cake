@@ -136,7 +136,7 @@ static async Task DispatchWorkflow(this ICakeContext context, BuildData data, st
  *           name     - The output name.
  *           value    - The output value.
  */
-static SetActionsStepOutput(this ICakeContext context, string name, string value)
+static void SetActionsStepOutput(this ICakeContext context, string name, string value)
 {
     var outputFile = context.EnvironmentVariable("GITHUB_OUTPUT");
     Ensure(!string.IsNullOrEmpty(outputFile), "Cannot set Actions step output: GITHUB_OUTPUT not set.");
