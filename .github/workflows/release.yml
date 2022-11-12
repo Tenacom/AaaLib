@@ -87,5 +87,5 @@ jobs:
       with:
         working-directory: ./TestResults/
         files: coverage.cobertura.xml
-        name: ${{ steps.build.outputs.version }}
+        name: v${{ steps.build.outputs.version }}
         verbose: true
