@@ -10,6 +10,7 @@
 [![Build, test, and pack](https://github.com/Tenacom/AaaLib/actions/workflows/build-test-pack.yml/badge.svg)](https://github.com/Tenacom/AaaLib/actions/workflows/build-test-pack.yml)
 [![CodeQL](https://github.com/Tenacom/AaaLib/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Tenacom/AaaLib/actions/workflows/codeql-analysis.yml)
 [![CodeFactor](https://www.codefactor.io/repository/github/Tenacom/AaaLib/badge)](https://www.codefactor.io/repository/github/Tenacom/AaaLib)
+[![Codecov](https://codecov.io/gh/Tenacom/AaaLib/branch/main/graph/badge.svg?token=PVHXLFZDML)](https://codecov.io/gh/Tenacom/AaaLib)
 
 ![Repobeats analytics image](https://repobeats.axiom.co/api/embed/e2da442e6a41fa0a4276108cd17680bac4029f09.svg "Repobeats analytics image")
 
