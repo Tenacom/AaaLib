@@ -1,4 +1,0 @@
-#nullable enable
-AaaLib.Aaa
-static AaaLib.Aaa.GetTheAnswer() -> int
-static AaaLib.Aaa.GetTheAnswerInItalian() -> System.ReadOnlySpan<char>
