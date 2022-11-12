@@ -1,8 +1,6 @@
 // Copyright (C) Tenacom and contributors. Licensed under the MIT license.
 // See LICENSE file in the project root for full license information.
 
-#tool dotnet:?package=nbgv&version=3.5.113
-
 #nullable enable
 
 // ---------------------------------------------------------------------------------------------
@@ -22,12 +20,10 @@ using System.Text.Json.Nodes;
  */
 static (string Version, string Ref, bool IsPublicRelease, bool IsPrerelease) GetVersionInformation(this ICakeContext context)
 {
-    var nbgv = context.Tools.Resolve("nbgv.dll");
     var nbgvOutput = new StringBuilder();
-    context.DotNetExecute(
-        nbgv,
-        "get-version --format json",
-        new DotNetExecuteSettings {
+    context.DotNetTool(
+        "nbgv get-version --format json",
+        new DotNetToolSettings {
             SetupProcessSettings = s => s
                 .SetRedirectStandardOutput(true)
                 .SetRedirectedStandardOutputHandler(x => {
