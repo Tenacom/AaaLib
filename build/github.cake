@@ -13,6 +13,8 @@
 using System.Threading.Tasks;
 using Octokit;
 
+using SysFile = System.IO.File;
+
 /*
  * Summary : Asynchronously creates a new draft release on the GitHub repository.
  * Params  : context - The Cake context.
@@ -126,6 +128,19 @@ static async Task DispatchWorkflow(this ICakeContext context, BuildData data, st
         .EnsureSuccessStatusCode(true);
 
     _ = await context.HttpPostAsync($"https://api.github.com/repos/{data.RepositoryOwner}/{data.RepositoryName}/actions/workflows/{filename}/dispatches", httpSettings);
+}
+
+/*
+ * Summary : Sets a GitHub Actions step output.
+ * Params  : context  - The Cake context.
+ *           name     - The output name.
+ *           value    - The output value.
+ */
+static SetActionsStepOutput(this ICakeContext context, string name, string value)
+{
+    var outputFile = context.EnvironmentVariable("GITHUB_OUTPUT");
+    Ensure(!string.IsNullOrEmpty(outputFile), "Cannot set Actions step output: GITHUB_OUTPUT not set.");
+    SysFile.AppendAllLines(outputFile, new[] { $"{name}={value}" }, Encoding.UTF8);
 }
 
 static GitHubClient CreateGitHubClient(this ICakeContext context)
