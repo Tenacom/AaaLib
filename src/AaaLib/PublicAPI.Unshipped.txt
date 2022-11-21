@@ -1,1 +1,39 @@
 #nullable enable
+AaaLib.Scheduling.DailySchedule
+AaaLib.Scheduling.DailySchedule.DailySchedule(NodaTime.LocalTime StartTime, NodaTime.LocalTime EndTime) -> void
+AaaLib.Scheduling.DailySchedule.EndTime.get -> NodaTime.LocalTime
+AaaLib.Scheduling.DailySchedule.EndTime.init -> void
+AaaLib.Scheduling.DailySchedule.GetStateAt(NodaTime.LocalDateTime dateTime) -> bool
+AaaLib.Scheduling.DailySchedule.StartTime.get -> NodaTime.LocalTime
+AaaLib.Scheduling.DailySchedule.StartTime.init -> void
+AaaLib.Scheduling.ISchedule
+AaaLib.Scheduling.ISchedule.GetStateAt(NodaTime.LocalDateTime dateTime) -> bool
+AaaLib.Scheduling.Schedule
+AaaLib.Scheduling.ScheduledDaysOfWeek
+AaaLib.Scheduling.ScheduledDaysOfWeek.All = AaaLib.Scheduling.ScheduledDaysOfWeek.Monday | AaaLib.Scheduling.ScheduledDaysOfWeek.Tuesday | AaaLib.Scheduling.ScheduledDaysOfWeek.Wednesday | AaaLib.Scheduling.ScheduledDaysOfWeek.Thursday | AaaLib.Scheduling.ScheduledDaysOfWeek.Friday | AaaLib.Scheduling.ScheduledDaysOfWeek.Saturday | AaaLib.Scheduling.ScheduledDaysOfWeek.Sunday -> AaaLib.Scheduling.ScheduledDaysOfWeek
+AaaLib.Scheduling.ScheduledDaysOfWeek.Friday = 16 -> AaaLib.Scheduling.ScheduledDaysOfWeek
+AaaLib.Scheduling.ScheduledDaysOfWeek.Monday = 1 -> AaaLib.Scheduling.ScheduledDaysOfWeek
+AaaLib.Scheduling.ScheduledDaysOfWeek.None = 0 -> AaaLib.Scheduling.ScheduledDaysOfWeek
+AaaLib.Scheduling.ScheduledDaysOfWeek.Saturday = 32 -> AaaLib.Scheduling.ScheduledDaysOfWeek
+AaaLib.Scheduling.ScheduledDaysOfWeek.Sunday = 64 -> AaaLib.Scheduling.ScheduledDaysOfWeek
+AaaLib.Scheduling.ScheduledDaysOfWeek.Thursday = 8 -> AaaLib.Scheduling.ScheduledDaysOfWeek
+AaaLib.Scheduling.ScheduledDaysOfWeek.Tuesday = 2 -> AaaLib.Scheduling.ScheduledDaysOfWeek
+AaaLib.Scheduling.ScheduledDaysOfWeek.Wednesday = 4 -> AaaLib.Scheduling.ScheduledDaysOfWeek
+AaaLib.Scheduling.ScheduleEnumerableExtensions
+AaaLib.Scheduling.WeeklySchedule
+AaaLib.Scheduling.WeeklySchedule.DaysOfWeek.get -> AaaLib.Scheduling.ScheduledDaysOfWeek
+AaaLib.Scheduling.WeeklySchedule.DaysOfWeek.init -> void
+AaaLib.Scheduling.WeeklySchedule.GetStateAt(NodaTime.LocalDateTime dateTime) -> bool
+AaaLib.Scheduling.WeeklySchedule.WeeklySchedule(AaaLib.Scheduling.ScheduledDaysOfWeek DaysOfWeek) -> void
+static AaaLib.Scheduling.Schedule.Always.get -> AaaLib.Scheduling.ISchedule!
+static AaaLib.Scheduling.Schedule.GetCombinedStateAt(NodaTime.LocalDateTime dateTime, AaaLib.Scheduling.ISchedule! first, AaaLib.Scheduling.ISchedule! second) -> bool
+static AaaLib.Scheduling.Schedule.GetCombinedStateAt(NodaTime.LocalDateTime dateTime, AaaLib.Scheduling.ISchedule! first, AaaLib.Scheduling.ISchedule! second, AaaLib.Scheduling.ISchedule! third) -> bool
+static AaaLib.Scheduling.Schedule.GetCombinedStateAt(NodaTime.LocalDateTime dateTime, params AaaLib.Scheduling.ISchedule![]! schedules) -> bool
+static AaaLib.Scheduling.Schedule.GetConstantSchedule(bool state) -> AaaLib.Scheduling.ISchedule!
+static AaaLib.Scheduling.Schedule.GetIntersectedStateAt(NodaTime.LocalDateTime dateTime, AaaLib.Scheduling.ISchedule! first, AaaLib.Scheduling.ISchedule! second) -> bool
+static AaaLib.Scheduling.Schedule.GetIntersectedStateAt(NodaTime.LocalDateTime dateTime, AaaLib.Scheduling.ISchedule! first, AaaLib.Scheduling.ISchedule! second, AaaLib.Scheduling.ISchedule! third) -> bool
+static AaaLib.Scheduling.Schedule.GetIntersectedStateAt(NodaTime.LocalDateTime dateTime, params AaaLib.Scheduling.ISchedule![]! schedules) -> bool
+static AaaLib.Scheduling.Schedule.Never.get -> AaaLib.Scheduling.ISchedule!
+static AaaLib.Scheduling.ScheduleEnumerableExtensions.GetCombinedStateAt(this System.Collections.Generic.IEnumerable<AaaLib.Scheduling.ISchedule!>! source, NodaTime.LocalDateTime dateTime) -> bool
+static AaaLib.Scheduling.ScheduleEnumerableExtensions.GetIntersectedStateAt(this System.Collections.Generic.IEnumerable<AaaLib.Scheduling.ISchedule!>! source, NodaTime.LocalDateTime dateTime) -> bool
+static AaaLib.Scheduling.WeeklySchedule.IsScheduledDayOfWeek(NodaTime.IsoDayOfWeek day, AaaLib.Scheduling.ScheduledDaysOfWeek days) -> bool
