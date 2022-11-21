@@ -31,6 +31,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "- Dependencies", "- Dependencies", "{96D17272-0DFC-4633-A4C6-62DF8C5EC7D9}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Packages.props = Directory.Packages.props
+		.config\dotnet-tools.json = .config\dotnet-tools.json
 		global.json = global.json
 	EndProjectSection
 EndProject
