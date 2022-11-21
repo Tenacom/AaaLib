@@ -36,8 +36,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "- Dependencies", "- Depende
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{28606732-7D0B-4F39-85E1-99AEDC33B6FA}"
 	ProjectSection(SolutionItems) = preProject
+		tests\.runsettings = tests\.runsettings
 		tests\Common.props = tests\Common.props
-		tests\default.runsettings = tests\default.runsettings
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AaaLibTests", "tests\AaaLibTests\AaaLibTests.csproj", "{21A68D5C-D88D-4BC1-9EA1-B47BC93CB00C}"
