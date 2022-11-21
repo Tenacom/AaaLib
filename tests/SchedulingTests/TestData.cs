@@ -14,6 +14,22 @@ public static class TestData
         new(2003, 4, 5, 13, 37, 12), // Wednesday
     };
 
+    public static readonly IReadOnlyList<(IsoDayOfWeek IsoDay, ScheduledDaysOfWeek ScheduledDays)> SingleDaysOfWeek = new List<(IsoDayOfWeek IsoDay, ScheduledDaysOfWeek ScheduledDays)>
+    {
+        (IsoDayOfWeek.Monday, ScheduledDaysOfWeek.Monday),
+        (IsoDayOfWeek.Tuesday, ScheduledDaysOfWeek.Tuesday),
+        (IsoDayOfWeek.Wednesday, ScheduledDaysOfWeek.Wednesday),
+        (IsoDayOfWeek.Thursday, ScheduledDaysOfWeek.Thursday),
+        (IsoDayOfWeek.Friday, ScheduledDaysOfWeek.Friday),
+        (IsoDayOfWeek.Saturday, ScheduledDaysOfWeek.Saturday),
+        (IsoDayOfWeek.Sunday, ScheduledDaysOfWeek.Sunday),
+    };
+
+    public static readonly IReadOnlyList<(IsoDayOfWeek IsoDay1, IsoDayOfWeek IsoDay2, ScheduledDaysOfWeek ScheduledDays)> DaysOfWeekInPairs
+        = (from x in SingleDaysOfWeek
+          from y in SingleDaysOfWeek
+          select (x.IsoDay, y.IsoDay, x.ScheduledDays | y.ScheduledDays)).ToArray();
+
     public static readonly IReadOnlyList<LocalDate> Dates = DateTimes.Select(dt => dt.Date).ToArray();
 
     public static IEnumerable<object[]> GetDateTimes()
@@ -46,4 +62,10 @@ public static class TestData
         yield return false;
         yield return true;
     }
+
+    public static IEnumerable<object[]> GetSingleDaysOfWeek()
+        => SingleDaysOfWeek.Select(static x => new object[] { x.IsoDay, x.ScheduledDays });
+
+    public static IEnumerable<object[]> GetDaysOfWeekInPairs()
+        => DaysOfWeekInPairs.Select(static x => new object[] { x.IsoDay1, x.IsoDay2, x.ScheduledDays });
 }
