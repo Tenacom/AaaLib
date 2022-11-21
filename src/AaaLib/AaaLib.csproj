@@ -15,6 +15,7 @@
     https://learn.microsoft.com/en-us/nuget/reference/errors-and-warnings/nu5104
   -->
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Diagnostics" />
     <PackageReference Include="PolyKit" NoWarn="NU5104" />
   </ItemGroup>
 
