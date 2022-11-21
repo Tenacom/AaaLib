@@ -3,7 +3,16 @@
   <PropertyGroup>
     <TestProjectType>UnitTest</TestProjectType>
     <TargetFrameworks>net48;net6.0;net7.0</TargetFrameworks>
+  </PropertyGroup>
+
+  <!--
+    This assembly is not going to interoperate with other assemblies.
+    Besides, the type names used here are not apt to cause ambiguities.
+    Therefore there is no need for a root namespace: let's save ourselves some declarations.
+  -->
+  <PropertyGroup>
     <RootNamespace />
+    <NoWarn>$(NoWarn);CA1050</NoWarn> <!--Declare types in namespaces -->
   </PropertyGroup>
 
   <ItemGroup>
