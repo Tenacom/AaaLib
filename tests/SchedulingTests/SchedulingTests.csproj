@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TestProjectType>UnitTest</TestProjectType>
     <TargetFrameworks>net48;net6.0;net7.0</TargetFrameworks>
+    <RootNamespace />
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,6 +15,8 @@
     <PackageReference Include="FluentAssertions" />
     <PackageReference Include="FluentAssertions.Analyzers" PrivateAssets="all" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="NodaTime" />
+    <PackageReference Include="NodaTime.Testing" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" PrivateAssets="all" />
   </ItemGroup>

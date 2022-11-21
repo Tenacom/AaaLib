@@ -4,6 +4,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UsePublicApiAnalyzers>false</UsePublicApiAnalyzers>
     <RunSettingsFilePath>$(MSBuildThisFileDirectory).runsettings</RunSettingsFilePath>
+    <CLSCompliant>false</CLSCompliant>
   </PropertyGroup>
 
   <PropertyGroup>

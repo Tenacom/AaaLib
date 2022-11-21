@@ -41,7 +41,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{28606732
 		tests\Common.props = tests\Common.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AaaLibTests", "tests\AaaLibTests\AaaLibTests.csproj", "{21A68D5C-D88D-4BC1-9EA1-B47BC93CB00C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SchedulingTests", "tests\SchedulingTests\SchedulingTests.csproj", "{21A68D5C-D88D-4BC1-9EA1-B47BC93CB00C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
