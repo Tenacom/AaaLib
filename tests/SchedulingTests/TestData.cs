@@ -19,9 +19,6 @@ public static class TestData
     public static IEnumerable<object[]> GetDateTimes()
         => DateTimes.Select(static dt => new object[] { dt });
 
-    public static IEnumerable<object[]> GetDates()
-        => DateTimes.Select(static dt => new object[] { dt.Date });
-
     public static IEnumerable<(bool First, bool Second, bool Result)> GetTwoIntersectedStates()
         => from x in GetOneState()
            from y in GetOneState()
@@ -32,13 +29,6 @@ public static class TestData
            from y in GetOneState()
            from z in GetOneState()
            select (x, y, z, x && y && z);
-
-    public static IEnumerable<(bool First, bool Second, bool Third, bool Fourth, bool Result)> GetFourIntersectedStates()
-        => from x in GetOneState()
-           from y in GetOneState()
-           from z in GetOneState()
-           from k in GetOneState()
-           select (x, y, z, k, x && y && z && k);
 
     public static IEnumerable<(bool First, bool Second, bool Result)> GetTwoCombinedStates()
         => from x in GetOneState()
@@ -51,26 +41,9 @@ public static class TestData
            from z in GetOneState()
            select (x, y, z, x || y || z);
 
-    public static IEnumerable<(bool First, bool Second, bool Third, bool Fourth, bool Result)> GetFourCombinedStates()
-        => from x in GetOneState()
-           from y in GetOneState()
-           from z in GetOneState()
-           from k in GetOneState()
-           select (x, y, z, k, x || y || z || k);
-
     public static IEnumerable<bool> GetOneState()
     {
         yield return false;
         yield return true;
-    }
-
-    private static IEnumerable<LocalTime> GetStartOfEveryQuarter()
-    {
-        var time = LocalTime.MinValue;
-        while (time < LocalTime.MaxValue)
-        {
-            yield return time;
-            time = time.PlusMinutes(15);
-        }
     }
 }
