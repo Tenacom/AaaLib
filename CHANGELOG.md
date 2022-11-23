@@ -14,8 +14,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changes to existing features
 
 - **BREAKING CHANGE:** Following .NET's [Library support for older frameworks](https://learn.microsoft.com/en-us/dotnet/core/compatibility/core-libraries/7.0/old-framework-support) policy, support for .NET Core 3.1 has been removed.
+- **BREAKING CHANGE:** Library code has been completely rewritten and is now a less feeble excuse for real library code.
+- Unit tests for all library code have been added.
+- Several additions and improvements have been made to CI scripts. Most notably:
+  - Code coverage data is automatically collected and uploaded to Codecov.
+  - Version increments are now automatic when creating a new release, according to changes in public API files. Increments can also be forced by setting the "Version spec change" workflow parameter to "Major" or "Minor".
 
 ### Bugs fixed in this release
+
+- When creating a new release, it was previously possible to increment the version specification more than once, e.g. from 1.0 to 3.0. This has been fixed: superflous version increments with respect to latest stable version are now ignored.
+- The CodeQL workflow only employed a subset of the available checks. Quality checks are now performed and any resulting alert appears in the Security tab of the repository.
 
 ### Known problems introduced by this release
 
