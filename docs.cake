@@ -14,7 +14,7 @@
 #load "./build/options.cake"
 #load "./build/process.cake"
 #load "./build/setup-teardown.cake"
-#load "./build/version.cake"
+#load "./build/versioning.cake"
 #load "./build/workspace.cake"
 
 #nullable enable
@@ -46,7 +46,7 @@ Task("_init")
             RepoOwner = data.RepositoryOwner,
             RepoName = data.RepositoryName,
             RepoUrl = $"{data.RepositoryHostUrl}/{data.RepositoryOwner}/{data.RepositoryName}",
-            RepoVersion = data.Version,
+            RepoVersion = data.VersionStr,
         };
 
         var options = new JsonSerializerOptions

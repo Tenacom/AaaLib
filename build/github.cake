@@ -23,7 +23,7 @@ using SysFile = System.IO.File;
  */
 static async Task<int> CreateDraftReleaseAsync(this ICakeContext context, BuildData data)
 {
-    var tag = data.Version;
+    var tag = data.VersionStr;
     var client = context.CreateGitHubClient();
     context.Information($"Creating a provisional draft release...");
     var newRelease = new NewRelease(tag)
@@ -47,7 +47,7 @@ static async Task<int> CreateDraftReleaseAsync(this ICakeContext context, BuildD
  */
 static async Task PublishReleaseAsync(this ICakeContext context, BuildData data, int id)
 {
-    var tag = data.Version;
+    var tag = data.VersionStr;
     var client = context.CreateGitHubClient();
     context.Information($"Generating release notes for {tag}...");
     var releaseNotesRequest = new GenerateReleaseNotesRequest(tag)

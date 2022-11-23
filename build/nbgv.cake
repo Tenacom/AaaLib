@@ -13,12 +13,12 @@ using System.Text.Json.Nodes;
 /*
  * Summary : Gets version information using the NBGV tool.
  * Params  : context - The Cake context.
- * Returns : Version         - The project version.
+ * Returns : VersionStr      - The project version.
  *           Ref             - The Git ref from which we are building.
  *           IsPublicRelease - True if a public release can be built, false otherwise.
  *           IsPrerelease    - True if the project version is tagged as prerelease, false otherwise.
  */
-static (string Version, string Ref, bool IsPublicRelease, bool IsPrerelease) GetVersionInformation(this ICakeContext context)
+static (string VersionStr, string Ref, bool IsPublicRelease, bool IsPrerelease) GetVersionInformation(this ICakeContext context)
 {
     var nbgvOutput = new StringBuilder();
     context.DotNetTool(
@@ -34,7 +34,7 @@ static (string Version, string Ref, bool IsPublicRelease, bool IsPrerelease) Get
 
     var json = ParseJsonObject(nbgvOutput.ToString(), "The output of nbgv");
     return (
-        Version: GetJsonPropertyValue<string>(json, "NuGetPackageVersion", "the output of nbgv"),
+        VersionStr: GetJsonPropertyValue<string>(json, "NuGetPackageVersion", "the output of nbgv"),
         Ref: GetJsonPropertyValue<string>(json, "BuildingRef", "the output of nbgv"),
         IsPublicRelease: GetJsonPropertyValue<bool>(json, "PublicRelease", "the output of nbgv"),
         IsPrerelease: !string.IsNullOrEmpty(GetJsonPropertyValue<string>(json, "PrereleaseVersion", "the output of nbgv")));
