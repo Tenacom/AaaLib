@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New features
 
+### Changes to existing features
+
+### Bugs fixed in this release
+
+### Known problems introduced by this release
+
+## [2.0.47](https://github.com/Tenacom/AaaLib/releases/tag/2.0.47) (2022-11-23)
+
+### New features
+
 - .NET 7 was added as a target platform.
 
 ### Changes to existing features
@@ -24,8 +34,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - When creating a new release, it was previously possible to increment the version specification more than once, e.g. from 1.0 to 3.0. This has been fixed: superflous version increments with respect to latest stable version are now ignored.
 - The CodeQL workflow only employed a subset of the available checks. Quality checks are now performed and any resulting alert appears in the Security tab of the repository.
-
-### Known problems introduced by this release
 
 ## [1.0.60](https://github.com/Tenacom/AaaLib/releases/tag/1.0.60) (2022-10-14)
 
