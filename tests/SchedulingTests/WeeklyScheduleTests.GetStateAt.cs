@@ -25,13 +25,13 @@ partial class WeeklyScheduleTests
             using (new AssertionScope())
             {
                 var schedule = new WeeklySchedule(scheduledDaysOfWeek);
-                var otherDays = TestData.SingleDaysOfWeek
+                var testDateTimes = TestData.SingleDaysOfWeek
                     .Select(x => x.IsoDay)
-                    .Where(x => x != dayOfWeek);
+                    .Where(x => x != dayOfWeek)
+                    .Select(x => TestDate.Next(x).At(LocalTime.Noon));
 
-                foreach (var otherDay in otherDays)
+                foreach (var dateTime in testDateTimes)
                 {
-                    var dateTime = TestDate.Next(otherDay).At(LocalTime.Noon);
                     schedule.GetStateAt(dateTime).Should().BeFalse();
                 }
             }
@@ -58,13 +58,13 @@ partial class WeeklyScheduleTests
             var schedule = new WeeklySchedule(scheduledDaysOfWeek);
             using (new AssertionScope())
             {
-                var otherDays = TestData.SingleDaysOfWeek
+                var testDateTimes = TestData.SingleDaysOfWeek
                     .Select(x => x.IsoDay)
-                    .Where(x => x != dayOfWeek1 && x != dayOfWeek2);
+                    .Where(x => x != dayOfWeek1 && x != dayOfWeek2)
+                    .Select(x => TestDate.Next(x).At(LocalTime.Noon));
 
-                foreach (var otherDay in otherDays)
+                foreach (var dateTime in testDateTimes)
                 {
-                    var dateTime = TestDate.Next(otherDay).At(LocalTime.Noon);
                     schedule.GetStateAt(dateTime).Should().BeFalse();
                 }
             }
