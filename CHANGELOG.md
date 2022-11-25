@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes to existing features
 
-- AaaLib now refreences a stable version of `PolyKit`.
+- AaaLib now references a stable version of `PolyKit`.
 
 ### Bugs fixed in this release
 
