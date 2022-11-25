@@ -11,13 +11,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes to existing features
 
+### Bugs fixed in this release
+
+### Known problems introduced by this release
+
+## [2.0.58](https://github.com/Tenacom/AaaLib/releases/tag/2.0.58) (2022-11-25)
+
+### Changes to existing features
+
 - AaaLib now refreences a stable version of `PolyKit`.
 
 ### Bugs fixed in this release
 
 - A bug in the GitHub Pages deployment workflow has been fixed: online documentation is again available.
-
-### Known problems introduced by this release
 
 ## [2.0.47](https://github.com/Tenacom/AaaLib/releases/tag/2.0.47) (2022-11-23)
 
