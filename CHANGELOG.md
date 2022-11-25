@@ -11,7 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changes to existing features
 
+- AaaLib now refreences a stable version of `PolyKit`.
+
 ### Bugs fixed in this release
+
+- A bug in the GitHub Pages deployment workflow has been fixed: online documentation is again available.
 
 ### Known problems introduced by this release
 
