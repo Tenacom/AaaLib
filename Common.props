@@ -16,7 +16,6 @@
     <ReadmeFileInPackage>true</ReadmeFileInPackage>
     <LicenseFileInPackage>true</LicenseFileInPackage>
     <ThirdPartyNoticeInPackage>true</ThirdPartyNoticeInPackage>
-    <UseVersionFile>false</UseVersionFile>
   </PropertyGroup>
 
   <!-- Common build options -->
