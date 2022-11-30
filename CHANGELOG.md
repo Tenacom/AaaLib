@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased changes
 
+The [`NodaTime`](https://github.com/nodatime/nodatime) dependency has been updated to keep up with changes in the time zone database.
+
 ### New features
 
 ### Changes to existing features
