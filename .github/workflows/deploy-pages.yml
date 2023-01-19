@@ -53,7 +53,7 @@ jobs:
         if [%RUNNER_DEBUG%]==[1] set CAKE_VERBOSITY=Diagnostic
         dotnet cake docs.cake --target All --verbosity %CAKE_VERBOSITY%
     - name: Setup GitHub Pages
-      uses: actions/configure-pages@v2
+      uses: actions/configure-pages@v3
     - name: Upload documentation artifact
       uses: actions/upload-pages-artifact@v1
       with:
