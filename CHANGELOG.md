@@ -7,8 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased changes
 
-Dependencies and CI scripts / workflows were updated.
-
 ### New features
 
 ### Changes to existing features
@@ -16,6 +14,10 @@ Dependencies and CI scripts / workflows were updated.
 ### Bugs fixed in this release
 
 ### Known problems introduced by this release
+
+## [2.0.75](https://github.com/Tenacom/AaaLib/releases/tag/2.0.75) (2023-03-05)
+
+Dependencies and CI scripts / workflows were updated.
 
 ## [2.0.67](https://github.com/Tenacom/AaaLib/releases/tag/2.0.67) (2022-11-30)
 
