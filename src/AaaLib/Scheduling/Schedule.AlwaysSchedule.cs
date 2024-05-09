@@ -7,7 +7,7 @@ namespace AaaLib.Scheduling;
 
 partial class Schedule
 {
-    private class AlwaysSchedule : ISchedule
+    private sealed class AlwaysSchedule : ISchedule
     {
         public bool GetStateAt(LocalDateTime dateTime) => true;
     }

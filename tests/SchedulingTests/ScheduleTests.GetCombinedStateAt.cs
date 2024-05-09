@@ -6,7 +6,7 @@ partial class ScheduleTests
     public sealed class GetCombinedStateAt
     {
         [Theory]
-        [MemberData(nameof(TestData.GetDateTimes), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.DateTimesData), MemberType = typeof(TestData))]
         public void WithTwoParams_WhenFirstIsNull_ThrowsArgumentNullException(LocalDateTime dateTime)
         {
             var act = () => Schedule.GetCombinedStateAt(dateTime, null!, Schedule.Always);
@@ -15,7 +15,7 @@ partial class ScheduleTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.GetDateTimes), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.DateTimesData), MemberType = typeof(TestData))]
         public void WithTwoParams_WhenSecondIsNull_ThrowsArgumentNullException(LocalDateTime dateTime)
         {
             var act = () => Schedule.GetCombinedStateAt(dateTime, Schedule.Always, null!);
@@ -24,12 +24,12 @@ partial class ScheduleTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.GetDateTimes), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.DateTimesData), MemberType = typeof(TestData))]
         public void WithTwoParams_ReturnsCombinedStateOfParams(LocalDateTime dateTime)
         {
             using (new AssertionScope())
             {
-                foreach (var (firstState, secondState, result) in TestData.GetTwoCombinedStates())
+                foreach (var (firstState, secondState, result) in TestData.TwoCombinedStates)
                 {
                     var first = Schedule.GetConstantSchedule(firstState);
                     var second = Schedule.GetConstantSchedule(secondState);
@@ -39,7 +39,7 @@ partial class ScheduleTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.GetDateTimes), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.DateTimesData), MemberType = typeof(TestData))]
         public void WithThreeParams_WhenFirstIsNull_ThrowsArgumentNullException(LocalDateTime dateTime)
         {
             var act = () => Schedule.GetCombinedStateAt(dateTime, null!, Schedule.Always, Schedule.Always);
@@ -48,7 +48,7 @@ partial class ScheduleTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.GetDateTimes), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.DateTimesData), MemberType = typeof(TestData))]
         public void WithThreeParams_WhenSecondIsNull_ThrowsArgumentNullException(LocalDateTime dateTime)
         {
             var act = () => Schedule.GetCombinedStateAt(dateTime, Schedule.Always, null!, Schedule.Always);
@@ -57,7 +57,7 @@ partial class ScheduleTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.GetDateTimes), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.DateTimesData), MemberType = typeof(TestData))]
         public void WithThreeParams_WhenThirdIsNull_ThrowsArgumentNullException(LocalDateTime dateTime)
         {
             var act = () => Schedule.GetCombinedStateAt(dateTime, Schedule.Always, Schedule.Always, null!);
@@ -66,12 +66,12 @@ partial class ScheduleTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.GetDateTimes), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.DateTimesData), MemberType = typeof(TestData))]
         public void WithThreeParams_ReturnsCombinedStateOfParams(LocalDateTime dateTime)
         {
             using (new AssertionScope())
             {
-                foreach (var (firstState, secondState, thirdState, result) in TestData.GetThreeCombinedStates())
+                foreach (var (firstState, secondState, thirdState, result) in TestData.ThreeCombinedStates)
                 {
                     var first = Schedule.GetConstantSchedule(firstState);
                     var second = Schedule.GetConstantSchedule(secondState);
@@ -82,7 +82,7 @@ partial class ScheduleTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.GetDateTimes), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.DateTimesData), MemberType = typeof(TestData))]
         public void WithNullParamArray_ThrowsArgumentNullException(LocalDateTime dateTime)
         {
             ISchedule[] schedules = null!;
@@ -92,7 +92,7 @@ partial class ScheduleTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.GetDateTimes), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.DateTimesData), MemberType = typeof(TestData))]
         public void WithParamArrayContainingNull_ThrowsArgumentException(LocalDateTime dateTime)
         {
             var schedules = new ISchedule[] { Schedule.Never, Schedule.Never, null! };
@@ -102,19 +102,19 @@ partial class ScheduleTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.GetDateTimes), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.DateTimesData), MemberType = typeof(TestData))]
         public void WithEmptyParamArray_ReturnsFalse(LocalDateTime dateTime)
         {
-            Schedule.GetCombinedStateAt(dateTime, Array.Empty<ISchedule>()).Should().Be(false);
+            Schedule.GetCombinedStateAt(dateTime, []).Should().Be(false);
         }
 
         [Theory]
-        [MemberData(nameof(TestData.GetDateTimes), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.DateTimesData), MemberType = typeof(TestData))]
         public void WithParamArrayOfOneItem_ReturnsSameStateAsItem(LocalDateTime dateTime)
         {
             using (new AssertionScope())
             {
-                foreach (var state in TestData.GetOneState())
+                foreach (var state in TestData.OneState)
                 {
                     var schedule = Schedule.GetConstantSchedule(state);
                     Schedule.GetCombinedStateAt(dateTime, schedule).Should().Be(state);
@@ -123,16 +123,16 @@ partial class ScheduleTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.GetDateTimes), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.DateTimesData), MemberType = typeof(TestData))]
         public void WithParamArray_ReturnsCombinedStateOfItems(LocalDateTime dateTime)
         {
             using (new AssertionScope())
             {
-                foreach (var (firstState, secondState, result) in TestData.GetTwoCombinedStates())
+                foreach (var (firstState, secondState, result) in TestData.TwoCombinedStates)
                 {
                     var first = Schedule.GetConstantSchedule(firstState);
                     var second = Schedule.GetConstantSchedule(secondState);
-                    Schedule.GetCombinedStateAt(dateTime, new[] { first, second }).Should().Be(result);
+                    Schedule.GetCombinedStateAt(dateTime, [first, second]).Should().Be(result);
                 }
             }
         }

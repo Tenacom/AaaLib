@@ -4,7 +4,7 @@
 public sealed partial class ScheduleTests
 {
     [Theory]
-    [MemberData(nameof(TestData.GetDateTimes), MemberType = typeof(TestData))]
+    [MemberData(nameof(TestData.DateTimesData), MemberType = typeof(TestData))]
     public void Always_GetStateAt_ReturnsTrue(LocalDateTime dateTime)
     {
         var schedule = Schedule.Always;
@@ -13,7 +13,7 @@ public sealed partial class ScheduleTests
     }
 
     [Theory]
-    [MemberData(nameof(TestData.GetDateTimes), MemberType = typeof(TestData))]
+    [MemberData(nameof(TestData.DateTimesData), MemberType = typeof(TestData))]
     public void Never_GetStateAt_ReturnsFalse(LocalDateTime dateTime)
     {
         var schedule = Schedule.Never;
@@ -22,12 +22,12 @@ public sealed partial class ScheduleTests
     }
 
     [Theory]
-    [MemberData(nameof(TestData.GetDateTimes), MemberType = typeof(TestData))]
+    [MemberData(nameof(TestData.DateTimesData), MemberType = typeof(TestData))]
     public void GetConstantSchedule_GetStateAt_ReturnsSameState(LocalDateTime dateTime)
     {
         using (new AssertionScope())
         {
-            foreach (var state in TestData.GetOneState())
+            foreach (var state in TestData.OneState)
             {
                 var schedule = Schedule.GetConstantSchedule(state);
                 schedule.GetStateAt(dateTime).Should().Be(state);

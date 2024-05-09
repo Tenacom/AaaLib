@@ -7,7 +7,7 @@ namespace AaaLib.Scheduling;
 
 partial class Schedule
 {
-    private class NeverSchedule : ISchedule
+    private sealed class NeverSchedule : ISchedule
     {
         public bool GetStateAt(LocalDateTime dateTime) => false;
     }

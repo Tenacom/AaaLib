@@ -6,14 +6,14 @@ partial class WeeklyScheduleTests
     public sealed class IsScheduledDayOfWeek
     {
         [Theory]
-        [MemberData(nameof(TestData.GetSingleDaysOfWeek), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SingleDaysOfWeekData), MemberType = typeof(TestData))]
         public void WithSingleDay_WithScheduledDay_ReturnsTrue(IsoDayOfWeek dayOfWeek, ScheduledDaysOfWeek scheduledDaysOfWeek)
         {
             WeeklySchedule.IsScheduledDayOfWeek(dayOfWeek, scheduledDaysOfWeek).Should().BeTrue();
         }
 
         [Theory]
-        [MemberData(nameof(TestData.GetSingleDaysOfWeek), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.SingleDaysOfWeekData), MemberType = typeof(TestData))]
         public void WithSingleDay_WithNonScheduledDay_ReturnsFalse(IsoDayOfWeek dayOfWeek, ScheduledDaysOfWeek scheduledDaysOfWeek)
         {
             using (new AssertionScope())
@@ -32,7 +32,7 @@ partial class WeeklyScheduleTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.GetDaysOfWeekInPairs), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.DaysOfWeekInPairsData), MemberType = typeof(TestData))]
         public void WithMultipleDays_WithScheduledDay_ReturnsTrue(IsoDayOfWeek dayOfWeek1, IsoDayOfWeek dayOfWeek2, ScheduledDaysOfWeek scheduledDaysOfWeek)
         {
             using (new AssertionScope())
@@ -43,7 +43,7 @@ partial class WeeklyScheduleTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.GetDaysOfWeekInPairs), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.DaysOfWeekInPairsData), MemberType = typeof(TestData))]
         public void WithMultipleDays_WithNonScheduledDay_ReturnsFalse(IsoDayOfWeek dayOfWeek1, IsoDayOfWeek dayOfWeek2, ScheduledDaysOfWeek scheduledDaysOfWeek)
         {
             using (new AssertionScope())

@@ -3,8 +3,31 @@
 
 public static class TestData
 {
-    public static readonly IReadOnlyList<LocalDateTime> DateTimes = new List<LocalDateTime>
-    {
+    public static readonly IEnumerable<bool> OneState = [false, true];
+
+    public static readonly IEnumerable<(bool First, bool Second, bool Result)> TwoIntersectedStates
+        = from x in OneState
+          from y in OneState
+          select (x, y, x && y);
+
+    public static readonly IEnumerable<(bool First, bool Second, bool Third, bool Result)> ThreeIntersectedStates
+        = from x in OneState
+          from y in OneState
+          from z in OneState
+          select (x, y, z, x && y && z);
+
+    public static readonly IEnumerable<(bool First, bool Second, bool Result)> TwoCombinedStates
+        = from x in OneState
+          from y in OneState
+          select (x, y, x || y);
+
+    public static readonly IEnumerable<(bool First, bool Second, bool Third, bool Result)> ThreeCombinedStates
+        = from x in OneState
+          from y in OneState
+          from z in OneState
+          select (x, y, z, x || y || z);
+
+    public static readonly IReadOnlyList<LocalDateTime> DateTimes = [
         new(2022, 5, 13, 16, 5, 19), // Friday
         new(1970, 12, 24, 3, 41, 24), // Thursday
         new(1984, 7, 1, 1, 53, 52), // Sunday
@@ -12,10 +35,9 @@ public static class TestData
         new(1997, 11, 3, 21, 24, 43), // Monday
         new(2026, 8, 18, 7, 11, 3), // Tuesday
         new(2003, 4, 5, 13, 37, 12), // Wednesday
-    };
+    ];
 
-    public static readonly IReadOnlyList<(IsoDayOfWeek IsoDay, ScheduledDaysOfWeek ScheduledDays)> SingleDaysOfWeek = new List<(IsoDayOfWeek IsoDay, ScheduledDaysOfWeek ScheduledDays)>
-    {
+    public static readonly IReadOnlyList<(IsoDayOfWeek IsoDay, ScheduledDaysOfWeek ScheduledDays)> SingleDaysOfWeek = [
         (IsoDayOfWeek.Monday, ScheduledDaysOfWeek.Monday),
         (IsoDayOfWeek.Tuesday, ScheduledDaysOfWeek.Tuesday),
         (IsoDayOfWeek.Wednesday, ScheduledDaysOfWeek.Wednesday),
@@ -23,7 +45,7 @@ public static class TestData
         (IsoDayOfWeek.Friday, ScheduledDaysOfWeek.Friday),
         (IsoDayOfWeek.Saturday, ScheduledDaysOfWeek.Saturday),
         (IsoDayOfWeek.Sunday, ScheduledDaysOfWeek.Sunday),
-    };
+    ];
 
     public static readonly IReadOnlyList<(IsoDayOfWeek IsoDay1, IsoDayOfWeek IsoDay2, ScheduledDaysOfWeek ScheduledDays)> DaysOfWeekInPairs
         = (from x in SingleDaysOfWeek
@@ -32,40 +54,24 @@ public static class TestData
 
     public static readonly IReadOnlyList<LocalDate> Dates = DateTimes.Select(dt => dt.Date).ToArray();
 
-    public static IEnumerable<object[]> GetDateTimes()
-        => DateTimes.Select(static dt => new object[] { dt });
+    public static readonly TheoryData<LocalDateTime> DateTimesData
+        = new(DateTimes);
 
-    public static IEnumerable<(bool First, bool Second, bool Result)> GetTwoIntersectedStates()
-        => from x in GetOneState()
-           from y in GetOneState()
-           select (x, y, x && y);
+    public static readonly TheoryData<IsoDayOfWeek, ScheduledDaysOfWeek> SingleDaysOfWeekData
+        = SingleDaysOfWeek.Aggregate(
+            new TheoryData<IsoDayOfWeek, ScheduledDaysOfWeek>(),
+            (x, d) =>
+            {
+                x.Add(d.IsoDay, d.ScheduledDays);
+                return x;
+            });
 
-    public static IEnumerable<(bool First, bool Second, bool Third, bool Result)> GetThreeIntersectedStates()
-        => from x in GetOneState()
-           from y in GetOneState()
-           from z in GetOneState()
-           select (x, y, z, x && y && z);
-
-    public static IEnumerable<(bool First, bool Second, bool Result)> GetTwoCombinedStates()
-        => from x in GetOneState()
-           from y in GetOneState()
-           select (x, y, x || y);
-
-    public static IEnumerable<(bool First, bool Second, bool Third, bool Result)> GetThreeCombinedStates()
-        => from x in GetOneState()
-           from y in GetOneState()
-           from z in GetOneState()
-           select (x, y, z, x || y || z);
-
-    public static IEnumerable<bool> GetOneState()
-    {
-        yield return false;
-        yield return true;
-    }
-
-    public static IEnumerable<object[]> GetSingleDaysOfWeek()
-        => SingleDaysOfWeek.Select(static x => new object[] { x.IsoDay, x.ScheduledDays });
-
-    public static IEnumerable<object[]> GetDaysOfWeekInPairs()
-        => DaysOfWeekInPairs.Select(static x => new object[] { x.IsoDay1, x.IsoDay2, x.ScheduledDays });
+    public static readonly TheoryData<IsoDayOfWeek, IsoDayOfWeek, ScheduledDaysOfWeek> DaysOfWeekInPairsData
+        = DaysOfWeekInPairs.Aggregate(
+            new TheoryData<IsoDayOfWeek, IsoDayOfWeek, ScheduledDaysOfWeek>(),
+            (x, d) =>
+            {
+                x.Add(d.IsoDay1, d.IsoDay2, d.ScheduledDays);
+                return x;
+            });
 }

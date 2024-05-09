@@ -6,7 +6,7 @@ partial class ScheduleEnumerableExtensionsTests
     public sealed class GetIntersectedStateAt
     {
         [Theory]
-        [MemberData(nameof(TestData.GetDateTimes), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.DateTimesData), MemberType = typeof(TestData))]
         public void WithNullEnumerable_ThrowsArgumentNullException(LocalDateTime dateTime)
         {
             IEnumerable<ISchedule> schedules = null!;
@@ -16,17 +16,17 @@ partial class ScheduleEnumerableExtensionsTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.GetDateTimes), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.DateTimesData), MemberType = typeof(TestData))]
         public void WithEnumerableContainingNull_ThrowsArgumentException(LocalDateTime dateTime)
         {
-            IEnumerable<ISchedule> schedules = new[] { Schedule.Always, Schedule.Always, null! };
+            IEnumerable<ISchedule> schedules = [Schedule.Always, Schedule.Always, null!];
             var act = () => schedules.GetIntersectedStateAt(dateTime);
             act.Should().Throw<ArgumentException>()
                 .WithParameterName("source");
         }
 
         [Theory]
-        [MemberData(nameof(TestData.GetDateTimes), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.DateTimesData), MemberType = typeof(TestData))]
         public void WithEmptyEnumerable_ReturnsTrue(LocalDateTime dateTime)
         {
             var items = Enumerable.Empty<ISchedule>();
@@ -34,12 +34,12 @@ partial class ScheduleEnumerableExtensionsTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.GetDateTimes), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.DateTimesData), MemberType = typeof(TestData))]
         public void WithOneItem_ReturnsSameStateAsItem(LocalDateTime dateTime)
         {
             using (new AssertionScope())
             {
-                foreach (var state in TestData.GetOneState())
+                foreach (var state in TestData.OneState)
                 {
                     var schedule = Schedule.GetConstantSchedule(state);
                     var items = new[] { schedule };
@@ -49,12 +49,12 @@ partial class ScheduleEnumerableExtensionsTests
         }
 
         [Theory]
-        [MemberData(nameof(TestData.GetDateTimes), MemberType = typeof(TestData))]
+        [MemberData(nameof(TestData.DateTimesData), MemberType = typeof(TestData))]
         public void WithMoreThanOneItem_ReturnsIntersectedStateOfItems(LocalDateTime dateTime)
         {
             using (new AssertionScope())
             {
-                foreach (var (firstState, secondState, thirdState, result) in TestData.GetThreeIntersectedStates())
+                foreach (var (firstState, secondState, thirdState, result) in TestData.ThreeIntersectedStates)
                 {
                     var first = Schedule.GetConstantSchedule(firstState);
                     var second = Schedule.GetConstantSchedule(secondState);
