@@ -2,22 +2,22 @@
 
   <!-- Dependencies -->
   <ItemGroup>
-    <PackageVersion Include="CommunityToolkit.Diagnostics" Version="8.1.0" />
+    <PackageVersion Include="CommunityToolkit.Diagnostics" Version="8.2.2" />
     <PackageVersion Include="Louis" Version="1.0.0-preview.8" />
-    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
-    <PackageVersion Include="NodaTime" Version="3.1.9" />
-    <PackageVersion Include="PolyKit" Version="2.0.30" />
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
+    <PackageVersion Include="NodaTime" Version="3.1.11" />
+    <PackageVersion Include="PolyKit" Version="3.0.9" />
   </ItemGroup>
 
   <!-- Development dependencies -->
   <ItemGroup>
-    <PackageVersion Include="coverlet.collector" Version="3.2.0" />
-    <PackageVersion Include="FluentAssertions" Version="6.11.0" />
-    <PackageVersion Include="FluentAssertions.Analyzers" Version="0.17.2" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
-    <PackageVersion Include="NodaTime.Testing" Version="3.1.6" />
-    <PackageVersion Include="xunit" Version="2.4.2" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="2.4.5" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.2" />
+    <PackageVersion Include="FluentAssertions" Version="6.12.0" />
+    <PackageVersion Include="FluentAssertions.Analyzers" Version="0.31.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+    <PackageVersion Include="NodaTime.Testing" Version="3.1.11" />
+    <PackageVersion Include="xunit" Version="2.8.0" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.0" />
   </ItemGroup>
 
 </Project>
