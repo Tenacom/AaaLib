@@ -7,7 +7,7 @@
 
   <!-- Configurations that affect the Test Framework -->
   <RunConfiguration>
-    <ResultsDirectory>../TestResults</ResultsDirectory>
+    <ResultsDirectory>./TestResults</ResultsDirectory>
     <TreatNoTestsAsError>false</TreatNoTestsAsError>
   </RunConfiguration>
 

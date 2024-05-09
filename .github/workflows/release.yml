@@ -18,18 +18,18 @@ on:
         - Stable
         - Minor
         - Major
-      checkPublicApi:
+      checkPublicApiFiles:
         description: 'Check public API files'
         required: false
         default: true
         type: boolean
-      forceUpdateChangelog:
-        description: 'Update changelog on preview'
+      updateChangelogOnPrerelease:
+        description: 'Update changelog on prerelease'
         required: false
         default: false
         type: boolean
-      checkChangelog:
-        description: 'Check changelog before update'
+      ensureChangelogNotEmpty:
+        description: 'Ensure changelog not empty'
         required: false
         default: true
         type: boolean
@@ -50,41 +50,41 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 'true'
       DOTNET_CLI_UI_LANGUAGE: 'en-US'
+      FEEDZ_IO_PRIVATE_TOKEN: ${{ secrets.FEEDZ_IO_PRIVATE_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
 
       # Deploy non-prerelease public packages on NuGet
       RELEASE_NUGET_SOURCE: 'https://api.nuget.org/v3/index.json'
       RELEASE_NUGET_KEY: ${{ secrets.NUGET_DEPLOYMENT_KEY }}
-      # Deploy prerelease public packages on a public MyGet feed
-      PRERELEASE_NUGET_SOURCE: 'https://www.myget.org/F/tenacom-preview/api/v3/index.json'
-      PRERELEASE_NUGET_KEY: ${{ secrets.MYGET_DEPLOYMENT_KEY }}
-      # Deploy all private packages on a private MyGet feed
-      MYGET_PRIVATE_FEED_PASSWORD: ${{ secrets.MYGET_PRIVATE_FEED_PASSWORD }}
-      PRIVATE_NUGET_SOURCE: 'https://www.myget.org/F/tenacom/api/v3/index.json'
-      PRIVATE_NUGET_KEY: ${{ secrets.MYGET_PRIVATE_FEED_KEY }}
+      # Deploy prerelease public packages on a public Feedz.io feed
+      PRERELEASE_NUGET_SOURCE: 'https://f.feedz.io/tenacom/preview/nuget/index.json'
+      PRERELEASE_NUGET_KEY: ${{ secrets.FEEDZ_IO_PRIVATE_TOKEN }}
+      # Deploy all private packages on a private Feedz.io feed
+      PRIVATE_NUGET_SOURCE: 'https://f.feedz.io/tenacom/private/nuget/index.json'
+      PRIVATE_NUGET_KEY: ${{ secrets.FEEDZ_IO_PRIVATE_TOKEN }}
 
       VERSION_SPEC_CHANGE: ${{ inputs.versionSpecChange }}
-      CHECK_PUBLIC_API: ${{ inputs.checkPublicApi }}
-      FORCE_UPDATE_CHANGELOG: ${{ inputs.forceUpdateChangelog }}
-      CHECK_CHANGELOG: ${{ inputs.checkChangelog }}
+      CHECK_PUBLIC_API_FILES: ${{ inputs.checkPublicApiFiles }}
+      UPDATE_CHANGELOG_ON_PRERELEASE: ${{ inputs.updateChangelogOnPrerelease }}
+      ENSURE_CHANGELOG_NOT_EMPTY: ${{ inputs.ensureChangelogNotEmpty }}
       CAKE_VERBOSITY: ${{ inputs.cakeVerbosity }}
     steps:
     - name: Log workflow inputs
       shell: cmd
       run: |
-        echo Version spec change           : %VERSION_SPEC_CHANGE%
-        echo Check public API files        : %CHECK_PUBLIC_API%
-        echo Update changelog on preview   : %FORCE_UPDATE_CHANGELOG%
-        echo Check changelog before update : %CHECK_CHANGELOG%
-        echo Cake verbosity                : %CAKE_VERBOSITY%
+        echo Version spec change            : %VERSION_SPEC_CHANGE%
+        echo Check public API files         : %CHECK_PUBLIC_API_FILES%
+        echo Update changelog on prerelease : %UPDATE_CHANGELOG_ON_PRERELEASE%
+        echo Ensure changelog not empty     : %ENSURE_CHANGELOG_NOT_EMPTY%
+        echo Cake verbosity                 : %CAKE_VERBOSITY%
     - name: Checkout repository with full history
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0 # Checkout with full history so nbgv can compute Git height correctly.
         token: ${{ secrets.RELEASE_TOKEN }}
         persist-credentials: true # We need auth set up in the Cake script
     - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         global-json-file: global.json
     - name: Restore .NET tools
@@ -97,10 +97,30 @@ jobs:
         if [%CAKE_VERBOSITY%]==[] set CAKE_VERBOSITY=Normal
         if [%RUNNER_DEBUG%]==[1] set CAKE_VERBOSITY=Diagnostic
         dotnet cake --target Release --verbosity %CAKE_VERBOSITY%
+
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+      if: hashFiles('temp/Cobertura.xml') != ''
+      uses: codecov/codecov-action@v4
       with:
-        working-directory: ./TestResults/
+        working-directory: ./temp/
         files: Cobertura.xml
         name: v${{ steps.build.outputs.version }}
         verbose: true
+
+    # Publish DocFX-generated documentation on GitHub pages.
+    # If there is no index.html file in docs/site, steps.setupGitHubPages.conclusion will be 'skipped';
+    # this will cause subsequent steps to be skipped too.
+    - name: Setup GitHub Pages
+      id: setupGitHubPages
+      if: hashFiles('docs/_site/index.html') != ''
+      uses: actions/configure-pages@v4
+    - name: Upload documentation artifact
+      id: uploadDocsArtifact
+      if: steps.setupGitHubPages.conclusion == 'success'
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: docs/_site/
+    - name: Deploy documentation to GitHub Pages
+      if: steps.uploadDocsArtifact.conclusion == 'success'
+      uses: actions/deploy-pages@v4
+  

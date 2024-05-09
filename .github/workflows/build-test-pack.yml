@@ -14,14 +14,14 @@ jobs:
       DOTNET_CLI_TELEMETRY_OPTOUT: 'true'
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 'true'
       DOTNET_CLI_UI_LANGUAGE: 'en-US'
-      MYGET_PRIVATE_FEED_PASSWORD: ${{ secrets.MYGET_PRIVATE_FEED_PASSWORD }}
+      FEEDZ_IO_PRIVATE_TOKEN: ${{ secrets.FEEDZ_IO_PRIVATE_TOKEN }}
     steps:
     - name: Checkout repository with full history
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0 # Checkout with full history so nbgv can compute Git height correctly.
     - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         global-json-file: global.json
     - name: Restore .NET tools
@@ -34,8 +34,9 @@ jobs:
         if [%RUNNER_DEBUG%]==[1] set CAKE_VERBOSITY=Diagnostic
         dotnet cake --target Pack --verbosity %CAKE_VERBOSITY%
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+      if: hashFiles('temp/Cobertura.xml') != ''
+      uses: codecov/codecov-action@v4
       with:
-        working-directory: ./TestResults/
+        working-directory: ./temp/
         files: Cobertura.xml
         verbose: true

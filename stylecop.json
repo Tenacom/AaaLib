@@ -4,6 +4,11 @@
   "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
 
   "settings": {
+    "indentation": {
+      "indentationSize": 4,
+      "tabSize": 4,
+      "useTabs": false
+    },
 
     "spacingRules": {
     },
@@ -21,7 +26,7 @@
 
     "namingRules": {
       "allowCommonHungarianPrefixes": true,
-      "allowedHungarianPrefixes": ["db", "id", "x"],
+      "allowedHungarianPrefixes": [],
       "allowedNamespaceComponents": [],
       "includeInferredTupleElementNames": false,
       "tupleElementNameCasing": "PascalCase"
@@ -39,7 +44,10 @@
 
     "documentationRules": {
       "companyName": "Tenacom",
-      "copyrightText": "Copyright (C) {companyName} and contributors. Licensed under the MIT license.\r\nSee the LICENSE file in the project root for full license information.",
+      "copyrightText": "Copyright (C) {companyName} and contributors. Licensed under the MIT license.{nl}See the LICENSE file in the project root for full license information.",
+      "variables": {
+        "nl": "\r\n"
+      },
       "xmlHeader": false,
       "documentInterfaces": true,
       "documentExposedElements": true,

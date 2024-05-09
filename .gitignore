@@ -1,14 +1,14 @@
 # Build artifacts
 artifacts/
 
-# Local build logs
-logs/
+# Local build temporary files
+temp/
 
 # Cake build
 tools/
 
 # Testing
-TestResults/
+**/TestResults/
 
 # Visual Studio
 **/bin/
@@ -24,7 +24,7 @@ _ReSharper.*/
 # Windows thumbnails
 Thumbs.db
 
-# DocFx
+# DocFX
 docs/globalMetadata.json
 docs/api/.manifest
 docs/api/*.yml

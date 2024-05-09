@@ -10,6 +10,8 @@
   <PropertyGroup>
     <NoWarn>$(NoWarn);IDE0022</NoWarn> <!-- Use expression body for methods -->
     <NoWarn>$(NoWarn);IDE0058</NoWarn> <!-- Expression value is never used -->
+    <NoWarn>$(NoWarn);CA1034</NoWarn> <!-- Nested types should not be visible -->
+    <NoWarn>$(NoWarn);CA1707</NoWarn> <!-- Identifiers should not contain underscores -->
   </PropertyGroup>
 
 </Project>
