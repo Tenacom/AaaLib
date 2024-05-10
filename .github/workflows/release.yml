@@ -113,7 +113,7 @@ jobs:
     - name: Setup GitHub Pages
       id: setupGitHubPages
       if: hashFiles('docs/_site/index.html') != ''
-      uses: actions/configure-pages@v4
+      uses: actions/configure-pages@v5
     - name: Upload documentation artifact
       id: uploadDocsArtifact
       if: steps.setupGitHubPages.conclusion == 'success'
